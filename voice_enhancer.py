@@ -70,33 +70,52 @@ print("data length - 10kHz:",f4)   # print for diagnostic purpose
 xf[f1:f2+1] *= 8
 xf[f4:f3+1] *= 8
 
-# Plot Frequency Domain - not log frequency
+# Plot Frequency Domain - not log frequency - raw
 pyplot.figure(4)
 pyplot.plot(freq,dbs)
-pyplot.title('Before Modification')
+pyplot.title('Before Modification (display until fs)')
 pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
 pyplot.savefig('fig4.eps', format='eps')
 pyplot.savefig('fig4.pdf', format='pdf')
 
-dbsm = 20*np.log10(abs(xf/len(data)))    # DB Conversion & Normalised for modified data
 pyplot.figure(5)
-pyplot.plot(freq,dbsm)
-pyplot.title('After Modification')
+pyplot.plot(freq,dbs)
+pyplot.xlim(1,fs/2)
+pyplot.title('Before Modification (display until fs/2)')
 pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
 pyplot.savefig('fig5.eps', format='eps')
 pyplot.savefig('fig5.pdf', format='pdf')
 
+# Plot Frequency Domain - not log frequency - modified
+dbsm = 20*np.log10(abs(xf/len(data)))    # DB Conversion & Normalised - modified data
+pyplot.figure(6)
+pyplot.plot(freq,dbsm)
+pyplot.title('After Modification (display until fs)')
+pyplot.xlabel('Frequency(Hz)')
+pyplot.ylabel('Amplitude(dB)')
+pyplot.savefig('fig6.eps', format='eps')
+pyplot.savefig('fig6.pdf', format='pdf')
+
+pyplot.figure(7)
+pyplot.plot(freq,dbsm)
+pyplot.xlim(1,fs/2)
+pyplot.title('After Modification (display until fs/2)')
+pyplot.xlabel('Frequency(Hz)')
+pyplot.ylabel('Amplitude(dB)')
+pyplot.savefig('fig7.eps', format='eps')
+pyplot.savefig('fig7.pdf', format='pdf')
+
 xffiltered = np.fft.ifft(xf)    # Inverse FFT
 
 # Plot Time Domain - modified
-pyplot.figure(6)
+pyplot.figure(8)
 pyplot.plot(time,xffiltered)
 pyplot.title('Time domain (modified)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
-pyplot.savefig('fig6.eps', format='eps')
-pyplot.savefig('fig6.pdf', format='pdf')
+pyplot.savefig('fig8.eps', format='eps')
+pyplot.savefig('fig8.pdf', format='pdf')
     
 write('improved.wav', fs, xffiltered.astype(data.dtype)) 
