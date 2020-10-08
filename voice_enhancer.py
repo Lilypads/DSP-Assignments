@@ -4,7 +4,7 @@ from scipy.io import wavfile
 from scipy.io.wavfile import write
 
 # Read WAV file Frequency sample: 44100 Hz and Data
-fs, data = wavfile.read(r'C:\Users\Visitor\Desktop\DSP\Voice2.wav')
+fs, data = wavfile.read('original.wav')
 
 print(len(data))
 
@@ -71,4 +71,4 @@ xffiltered = np.fft.ifft(xf)
 pyplot.figure(6)
 pyplot.plot(xffiltered)
     
-write('output4.wav', fs, xffiltered.astype(data.dtype)) 
+write('improved.wav', fs, xffiltered.astype(data.dtype)) 
