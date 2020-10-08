@@ -8,7 +8,7 @@ fs, data = wavfile.read('original.wav')
 
 print(len(data))
 
-xf = np.fft.fft(data)     # Fourier Transform 
+xf = np.fft.fft(data)     # Fast Fourier Transform 
 
 xfourier = xf/len(data)   # Fourier Transform Normalised
 # DB Conversion 
