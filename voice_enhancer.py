@@ -27,6 +27,7 @@ pyplot.title('Time domain (raw)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 pyplot.savefig('fig1.eps', format='eps', dpi=1200)
+pyplot.savefig('fig1.pdf', format='pdf', dpi=1200)
 
 # Create x-axis for frequency domain plot
 freq = np.linspace(0,fs,len(data))
@@ -40,6 +41,7 @@ pyplot.ylabel('Amplitude(dB)')
 pyplot.xscale('log')            # Log Scale
 #pyplot.yscale('log')
 pyplot.savefig('fig2.eps', format='eps', dpi=1200)
+pyplot.savefig('fig2.pdf', format='pdf', dpi=1200)
 
 pyplot.figure(3)
 pyplot.plot(freq, dbs)
@@ -50,6 +52,7 @@ pyplot.ylabel('Amplitude(dB)')
 pyplot.xscale('log')            # Log Scale
 #pyplot.yscale('log')
 pyplot.savefig('fig3.eps', format='eps', dpi=1200)
+pyplot.savefig('fig3.pdf', format='pdf', dpi=1200)
 
 # Find the array around 6000 - 10000 Hz
 f1 = int(len(xf)/fs*6000)
@@ -74,6 +77,7 @@ pyplot.title('Before Modification')
 pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
 pyplot.savefig('fig4.eps', format='eps', dpi=1200)
+pyplot.savefig('fig4.pdf', format='pdf', dpi=1200)
 
 dbsm = 20*np.log10(abs(xf/len(data)))    # DB Conversion & Normalised for modified data
 pyplot.figure(5)
@@ -82,6 +86,7 @@ pyplot.title('After Modification')
 pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
 pyplot.savefig('fig5.eps', format='eps', dpi=1200)
+pyplot.savefig('fig5.pdf', format='pdf', dpi=1200)
 
 xffiltered = np.fft.ifft(xf)    # Inverse FFT
 
@@ -92,5 +97,6 @@ pyplot.title('Time domain (modified)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 pyplot.savefig('fig6.eps', format='eps', dpi=1200)
+pyplot.savefig('fig6.pdf', format='pdf', dpi=1200)
     
 write('improved.wav', fs, xffiltered.astype(data.dtype)) 
