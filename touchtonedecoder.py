@@ -12,24 +12,20 @@ data = lines[:,1]
 time = lines[:,0] #ms
 
 fs = 1000 #hz
-print(len(data))
+print("data length:",len(data))        # print for diagnostic purpose
 
-# Plot Data
+# Plot Time Domain
 pyplot.figure(1)
 pyplot.title('file touchtone')
 pyplot.plot(time,data)
 pyplot.xlabel('Time(ms)')
 pyplot.ylabel('Amplitude')
 
-#avg = sum(data)/len(data)
-
-#Fourier Transform
+# Plot Frequency Domain
 xftone = np.fft.fft(data) 
 xftone[0] = 0   # deleting weird bit
-
-xfourier = xftone/len(data)
+xfourier = xftone/len(data)         # Normalised Data
 dbs = 20*np.log10(abs(xfourier))    # DB Conversion
-
 freq = np.linspace(0,fs,len(data))
 
 pyplot.figure(2)
@@ -38,6 +34,7 @@ pyplot.plot(freq,dbs)
 pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
 
+# Zoomed version for diagnostic purpose
 pyplot.figure(3)
 pyplot.title('file touchtone partly')
 pyplot.plot(time,data)
@@ -45,7 +42,7 @@ pyplot.xlim(2800,2900)
 pyplot.xlabel('Time(ms)')
 pyplot.ylabel('Amplitude')
 
-# Plot frequency
+# Plot Section Frequency Spectrum + Detect Number
 def plotFreq(index,data,start,stop):
     section=np.empty(stop-start)
     for i in range(stop-start):
@@ -64,16 +61,16 @@ def plotFreq(index,data,start,stop):
     pyplot.ylabel('Amplitude(dB)')
     
     #find data point at respective frequencies
-    n697 = int(len(xfsection)/fs*697)        
-    n770 = int(len(xfsection)/fs*770)      
-    n852 = int(len(xfsection)/fs*852) 
-    n941 = int(len(xfsection)/fs*941)
-    n1209 = int(len(xfsection)/fs*330) 
-    n1336 = int(len(xfsection)/fs*1336) 
-    n1477 = int(len(xfsection)/fs*1477)
-    print(n1209)
+    n697 = int(len(section)/fs*697)        
+    n770 = int(len(section)/fs*770)      
+    n852 = int(len(section)/fs*852) 
+    n941 = int(len(section)/fs*941)
+    n1209 = int(len(section)/fs*330) 
+    n1336 = int(len(section)/fs*1336) 
+    n1477 = int(len(section)/fs*1477)
+    #print(n1209)        # print for diagnostic purpose
   
-    numb=-1
+    numb=-1        # cannot detect any number arg
     if (dbs[n697] > 10) and (dbs[n1209] > 10):
         numb=1
     elif (dbs[n697] > 10) and (dbs[n1336] > 10):
@@ -96,48 +93,52 @@ def plotFreq(index,data,start,stop):
         numb=0
     return numb
 
-# Cutting time finder
+# Section Split Time Finder
 def oneDigit(data,time):
-    start=np.empty(13,dtype=int)
+    start=np.empty(13,dtype=int)    # has 13 sections
     stop=np.empty(13,dtype=int)
-    k=0     # grace ounter
+    g=0     # grace counter
     m=0     # Start + Stop counter
     j=0     # Start counter
-    n=0     # Stop counter
+    k=0     # Stop counter
     thresh=50
     mint=10
     grace=np.zeros(len(data)+1)
     for i in range(len(data)):
         if np.abs(data[i]-3235)<thresh:
-            k+=1
-            if k>mint:
+            g+=1
+            if g>mint:
                 grace[i]=1
         if np.abs(data[i]-3235)>thresh:
             grace[i]=0
-            k=0
+            g=0
         if grace[i-1]!=grace[i]:
-            print(grace[i])
+            #print(grace[i])        # print for diagnostic purpose
             if grace[i]==0:
                 print("start time:",time[i])
                 start[j]=time[i]
                 j+=1
             else:
                 print("stop time:",time[i])
-                if m>0:             # we don't want first stop to be saved
-                    stop[n]=time[i]
-                    n+=1
-                m+=1
-    print(m)
-    print(start)
-    print(stop)
+                if m>0:       # we don't want first stop to be saved
+                    stop[k]=time[i]
+                    k+=1
+            m+=1
+            #print(m)        # print for diagnostic purpose
+    print(start)            # print for diagnostic purpose
+    print(stop)             # print for diagnostic purpose
     return start,stop
-        
+     
+# Main Function   
 start=np.empty(13,dtype=int)
 stop=np.empty(13,dtype=int) 
-start,stop = oneDigit(data,time)
+start,stop = oneDigit(data,time)        # Get Start Stop Time
 for i in range(13):
-    num = plotFreq(i,data,start[i],stop[i])
-    print(num)
+    num = plotFreq(i,data,start[i],stop[i])     # Process each section
+    if num == -1:
+        print("Cannot detect number.")
+    else: 
+        print("The number pressed:",num)            # Print output number
 
 '''
 # Sectioning each number
