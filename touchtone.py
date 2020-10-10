@@ -4,7 +4,7 @@ from numpy import loadtxt
 from matplotlib import pyplot
 from scipy.io.wavfile import write
 
-
+# Load data
 lines = loadtxt("touchtone3.dat")
 
 # Separate data into two aspects
@@ -12,40 +12,40 @@ data = lines[:,1]
 time = lines[:,0] #ms
 
 fs = 1000 #hz
-# Touchtone Exported
-datalist = list(data)
-#write('touchtonesounds.wav', 1000, data) 
-'''
-for i in time:
-    i *= 10
- '''   
+
 # Plot Data
 pyplot.figure(1)
 pyplot.title('file touchtone')
-pyplot.plot(time,datalist)
+pyplot.plot(time,data)
 
 #avg = sum(data)/len(data)
 
 #Fourier Transform
-xftone = np.fft.fft(datalist) 
+xftone = np.fft.fft(data) 
 xftone[0] = 0   #weird bit
 
-xfourier = xftone/len(datalist)
+xfourier = xftone/len(data)
 dbs = 20*np.log10(abs(xfourier))    # DB Conversion
 
-freq = np.linspace(0,fs,len(datalist))
+freq = np.linspace(0,fs,len(data))
 
 pyplot.figure(2)
 pyplot.title('fft touchtone')
 pyplot.plot(freq,dbs)
 #pyplot.xlim(1,len(time)/2)
 
+pyplot.figure(3)
+pyplot.title('file touchtone partly')
+pyplot.plot(time,data)
+pyplot.xlim(2800,2900)
+
+
 recording=np.array([1,1])
 k=0     # grace counter
 m=0     # Start Stop Cunter
 thresh=50
 mint=10
-grace=np.zeros(len(datalist)+1)
+grace=np.zeros(len(data)+1)
 pulse=None
 for i in range(len(data)):
     if np.abs(data[i]-3235)<thresh:
@@ -68,16 +68,10 @@ print(len(data))
 print(m)
 
 #half rect
+datalist = list(data)
 for i in range(len(data)):
     if datalist[i]<3233:
         datalist[i]=3333
-
-pyplot.figure(3)
-pyplot.title('file touchtone halfrect')
-pyplot.plot(time,data)
-pyplot.xlim(2800,2900)
-
-
 
 
 #failed attempts
@@ -106,8 +100,6 @@ print(len(data))
 print(n)
 print(m)
   '''          
-    
-
 
 #Peak Detector
 '''
