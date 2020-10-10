@@ -70,6 +70,15 @@ print("data length - 10kHz:",f4)   # print for diagnostic purpose
 xf[f1:f2+1] *= 8
 xf[f4:f3+1] *= 8
 
+# Find the array around 60-250 Hz - base
+b1 = int(len(xf)/fs*60)
+b2 = int(len(xf)/fs*250)
+b3 = len(xf) - b1
+b4 = len(xf) - b2
+# 60-250 hz is gained by 2
+xf[b1:b2+1] *= 2
+xf[b4:b3+1] *= 2
+
 # Plot Frequency Domain - not log frequency - raw
 pyplot.figure(4)
 pyplot.plot(freq,dbs)
