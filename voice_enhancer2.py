@@ -4,7 +4,7 @@ from scipy.io import wavfile
 from scipy.io.wavfile import write
 
 # Read WAV file Frequency sample: 44100 Hz and Data
-fs, data = wavfile.read(r'C:\Users\Visitor\Desktop\DSP\Voice2.wav')
+fs, data = wavfile.read(r'C:\Users\Visitor\Desktop\DSP\Brownfox.wav')
 
 print(len(data))
 
@@ -52,16 +52,29 @@ f2 = int(len(xf)/fs*10000)
 f3 = len(xf) - f1
 f4 = len(xf) - f2
 
-print(f1)
-print(f2)
-print(f3)
-print(f4)
+# Increase Bass Area
+b1 = int(len(xf)/fs*60)
+b2 = int(len(xf)/fs*250)
+b3 = len(xf) - b1
+b4 = len(xf) - b2
 
-gain = 8
+print(f1,f2,f3,f4)
+print(b1,b2,b3,b4)
 
 # 6000 - 10000 hz is gained by
-xf[f1:f2+1] *= 8
-xf[f4:f3+1] *= 8
+gain = 8
+#xf[f1:f2+1] *= gain
+#xf[f4:f3+1] *= gain
+
+# 6000 - 10000 hz is gained by
+bassgain = 2
+
+pyplot.figure(7)
+pyplot.plot(xf)
+
+xf[b1:b2+1] *= bassgain
+xf[b4:b3+1] *= bassgain
+
 
 pyplot.figure(5)
 pyplot.plot(xf)
@@ -71,4 +84,4 @@ xffiltered = np.fft.ifft(xf)
 pyplot.figure(6)
 pyplot.plot(xffiltered)
     
-write('output4.wav', fs, xffiltered.astype(data.dtype)) 
+write('output5.wav', fs, xffiltered.astype(data.dtype)) 
