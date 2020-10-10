@@ -71,7 +71,7 @@ def plotFreq(index,data,start,stop):
     #print(n1209)        # print for diagnostic purpose
   
     numb=-1        # cannot detect any number arg
-    if (dbs[n697] > 10) and (dbs[n1209] > 10):
+    if (dbs[n697] > 10) and (dbs[n1209] > 10):      # use 10dB as threshold
         numb=1
     elif (dbs[n697] > 10) and (dbs[n1336] > 10):
         numb=2
