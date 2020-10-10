@@ -5,7 +5,7 @@ from matplotlib import pyplot
 from scipy.io.wavfile import write
 
 # Load data
-lines = loadtxt("touchtone3.dat")
+lines = loadtxt("touchtones.dat")
 
 # Separate data into two aspects
 data = lines[:,1]
@@ -68,9 +68,10 @@ def plotFreq(index,data,start,stop):
     n770 = int(len(xfsection)/fs*770)      
     n852 = int(len(xfsection)/fs*852) 
     n941 = int(len(xfsection)/fs*941)
-    n1209 = int(len(xfsection)/fs*1209) 
+    n1209 = int(len(xfsection)/fs*330) 
     n1336 = int(len(xfsection)/fs*1336) 
-    n1477 = int(len(xfsection)/fs*1477) 
+    n1477 = int(len(xfsection)/fs*1477)
+    print(n1209)
   
     numb=-1
     if (dbs[n697] > 10) and (dbs[n1209] > 10):
@@ -146,7 +147,7 @@ for i in range(j):
         section = 
         section[i,b] = data[start[i]+b]
         
- '''     
+'''     
 
 
 '''
