@@ -45,10 +45,58 @@ pyplot.xlim(2800,2900)
 pyplot.xlabel('Time(ms)')
 pyplot.ylabel('Amplitude')
 
+# Plot frequency
+def plotFreq(index,data,start,stop):
+    section=np.empty(stop-start)
+    for i in range(stop-start):
+        section[i]=data[start+i]
+    #time=np.linspace(0,stop-start,1)
+    xfsection = np.fft.fft(section)
+    xfsection[0] = 0        # deleting weird bit
+    xfourier = xfsection/len(section)
+    dbs = 20*np.log10(abs(xfourier))
+    freq = np.linspace(0,fs,len(section))
+    pyplot.figure(index+4)
+    pyplot.title('fft section')
+    pyplot.plot(freq,dbs)
+    pyplot.xlabel('Frequency(Hz)')
+    pyplot.ylabel('Amplitude(dB)')
+    
+    #find data point at respective frequencies
+    n697 = int(len(xfsection)/fs*697)        
+    n770 = int(len(xfsection)/fs*770)      
+    n852 = int(len(xfsection)/fs*852) 
+    n941 = int(len(xfsection)/fs*941)
+    n1209 = int(len(xfsection)/fs*1209) 
+    n1336 = int(len(xfsection)/fs*1336) 
+    n1477 = int(len(xfsection)/fs*1477) 
+    
+    if dbs[n697] > 10 and dbs[n1209] > 10:
+        number=1
+    if dbs[n697] > 10 and dbs[n1336] > 10:
+        number=2
+    if dbs[n697] > 10 and dbs[n1477] > 10:
+        number=3
+    if dbs[n770] > 10 and dbs[n1209] > 10:
+        number=4
+    if dbs[n770] > 10 and dbs[n1336] > 10:
+        number=5
+    if dbs[n770] > 10 and dbs[n1477] > 10:
+        number=6
+    if dbs[n852] > 10 and dbs[n1209] > 10:
+        number=7
+    if dbs[n852] > 10 and dbs[n1336] > 10:
+        number=8
+    if dbs[n852] > 10 and dbs[n1477] > 10:
+        number=9
+    if dbs[n941] > 10 and dbs[n1336] > 10:
+        number=0
+    return number
+
 # Cutting time finder
-def oneDigit(data):
-    start=np.empty(13)
-    stop=np.empty(13)
+def oneDigit(data,time):
+    start=np.empty(13,dtype=int)
+    stop=np.empty(13,dtype=int)
     k=0     # grace ounter
     m=0     # Start + Stop counter
     j=0     # Start counter
@@ -80,8 +128,13 @@ def oneDigit(data):
     print(start)
     print(stop)
     return start,stop
-         
-
+        
+start=np.empty(13,dtype=int)
+stop=np.empty(13,dtype=int) 
+start,stop = oneDigit(data,time)
+for i in range(13):
+    number = plotFreq(i,data,start[i],stop[i])
+    print(number)
 
 '''
 # Sectioning each number
