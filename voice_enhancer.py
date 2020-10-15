@@ -66,12 +66,12 @@ print("10kHz data point:",f2)      # print for diagnostic purpose
 print("data length - 6kHz:",f3)    # print for diagnostic purpose
 print("data length - 10kHz:",f4)   # print for diagnostic purpose
 
-# 6000 - 10000 hz is gained by 8
-xf[f1:f2+1] *= 8
-xf[f4:f3+1] *= 8
+# 6000 - 10000 hz is gained by 3
+xf[f1:f2+1] *= 3
+xf[f4:f3+1] *= 3
 
-# Find the array around 60-250 Hz - base
-b1 = int(len(xf)/fs*60)
+# Find the array around 120-250 Hz - base
+b1 = int(len(xf)/fs*120)
 b2 = int(len(xf)/fs*250)
 b3 = len(xf) - b1
 b4 = len(xf) - b2
