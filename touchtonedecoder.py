@@ -6,7 +6,7 @@ from scipy.io.wavfile import write
 from scipy import signal
 
 # Load data
-lines = loadtxt("touchtones2.dat")
+lines = loadtxt("touchtones.dat")
 
 # Separate data into two aspects
 data = lines[:,1]
@@ -67,7 +67,7 @@ def plotFreq(index,data,start,stop):
     
     
     #find data point at respective frequencies either add or minus 1000
-    print(len(section))
+    print("Section Length:",len(section))   # print for diagnostic purpose
     n697 = int((abs(697-fs))/fs*len(section))   
     n770 = int((abs(770-fs))/fs*len(section))       
     n852 = int((abs(852-fs))/fs*len(section))   
@@ -77,17 +77,17 @@ def plotFreq(index,data,start,stop):
     n1477 = int((abs(1477-fs))/fs*len(section))
     
     #findpeaks 
-    peaks = scipy.signal.find_peaks(dbs, height=10)  
-    print(peaks[0])
-    print(n770,n1209)
+    #peaks = scipy.signal.find_peaks(dbs, height=10)  
+    #print("Peaks:",peaks[0])        # print for diagnostic purpose
+    #print(n770,n1209)              # print for diagnostic purpose
     
 
     numb=-1                                          # cannot detect any number arg
-    offs=20
+    offs=18
                                     
-    if (max(dbs[n697-offs:n697+offs]) > 20) and (max(dbs[n1209-offs:n1209+offs]) > 20):      # use 10dB as threshold
+    if (max(dbs[n697-offs:n697+offs]) > 20) and (max(dbs[n1209-offs:n1209+offs]) > 20):      # use 20dB as threshold
         numb=1
-    if (max(dbs[n697-offs:n697+offs]) > 20) and (max(dbs[n1336-offs:n1336+offs]) > 20):      # use 10dB as threshold
+    if (max(dbs[n697-offs:n697+offs]) > 20) and (max(dbs[n1336-offs:n1336+offs]) > 20):      # use 20dB as threshold
         numb=2
     if (max(dbs[n697-offs:n697+offs]) > 20) and (max(dbs[n1477-offs:n1477+offs]) > 20):     
         numb=3
@@ -153,10 +153,10 @@ dial=np.empty(13,dtype=int)
 start,stop = oneDigit(data,time)        # Get Start Stop Time
 for i in range(13):
     num = plotFreq(i,data,start[i],stop[i]) # Process each section
+    dial[i] = num
     if num == -1:
         print("Cannot detect number.")
     else: 
-        dial[i] = num
         print("The number pressed:",num)
 
 print(dial)
