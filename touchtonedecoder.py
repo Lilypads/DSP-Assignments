@@ -135,7 +135,7 @@ def oneDigit(data,time):
             else:
                 #print("stop time:",time[i])
                 if m>0:       # we don't want first stop to be saved
-                    stop[k]=time[i]
+                    stop[k]=time[i]-10
                     k+=1
             m+=1
             #print(m)        # print for diagnostic purpose
@@ -151,18 +151,15 @@ start=np.empty(13,dtype=int)
 stop=np.empty(13,dtype=int) 
 dial=np.empty(13,dtype=int) 
 start,stop = oneDigit(data,time)        # Get Start Stop Time
-m = 0
 for i in range(13):
     num = plotFreq(i,data,start[i],stop[i]) # Process each section
-    m += 1
     if num == -1:
         print("Cannot detect number.")
     else: 
         dial[i] = num
         print("The number pressed:",num)
-        # Print output number
-        if m > 12:
-            print(dial)
+
+print(dial)
 
 
 
