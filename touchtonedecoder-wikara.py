@@ -3,10 +3,9 @@ import scipy
 from numpy import loadtxt
 from matplotlib import pyplot
 from scipy.io.wavfile import write
-from scipy import signal
 
 # Load data
-lines = loadtxt("touchtones2.dat")
+lines = loadtxt("touchtones.dat")
 
 # Separate data into two aspects
 data = lines[:,1]
@@ -16,11 +15,11 @@ fs = 1000 #hz
 print("data length:",len(data))        # print for diagnostic purpose
 
 # Plot Time Domain
-#pyplot.figure(1)
-#pyplot.title('file touchtone')
-#pyplot.plot(time,data)
-#pyplot.xlabel('Time(ms)')
-#pyplot.ylabel('Amplitude')
+pyplot.figure(1)
+pyplot.title('file touchtone')
+pyplot.plot(time,data)
+pyplot.xlabel('Time(ms)')
+pyplot.ylabel('Amplitude')
 
 # Plot Frequency Domain
 xftone = np.fft.fft(data) 
@@ -29,81 +28,70 @@ xfourier = xftone/len(data)         # Normalised Data
 dbs = 20*np.log10(abs(xfourier))    # DB Conversion
 freq = np.linspace(0,fs,len(data))
 
-#pyplot.figure(2)
-#pyplot.title('fft touchtone')
-#pyplot.plot(freq,dbs)
-#pyplot.xlabel('Frequency(Hz)')
-#pyplot.ylabel('Amplitude(dB)')
+pyplot.figure(2)
+pyplot.title('fft touchtone')
+pyplot.plot(freq,dbs)
+pyplot.xlabel('Frequency(Hz)')
+pyplot.ylabel('Amplitude(dB)')
 
 # Zoomed version for diagnostic purpose
-#pyplot.figure(3)
-#pyplot.title('file touchtone partly')
-#pyplot.plot(time,data)
-#pyplot.xlim(2800,2900)
-#pyplot.xlabel('Time(ms)')
-#pyplot.ylabel('Amplitude')
+pyplot.figure(3)
+pyplot.title('file touchtone partly')
+pyplot.plot(time,data)
+pyplot.xlim(2800,2900)
+pyplot.xlabel('Time(ms)')
+pyplot.ylabel('Amplitude')
 
 # Plot Section Frequency Spectrum + Detect Number
-count = 0
 def plotFreq(index,data,start,stop):
-    global count
-    count +=1
-    
     section=np.empty(stop-start)    # Initialise Empty Array
     for i in range(stop-start):
         section[i]=data[start+i]
     #time=np.linspace(0,stop-start,1)
-    xfsection = np.fft.fft(section)         # Fourier transfor the whole thing
-    xfourier = xfsection/len(section)
+    xfsection = np.fft.fft(section)         # Fourier transform the whole thing
+    xfourier = xfsection/len(section)       # Normalise
     dbs = 20*np.log10(abs(xfourier))
     dbs[0] = -20        # deleting weird bit
+    
     freq = np.linspace(0,fs,len(section))
-    pyplot.figure(index+4)
+    pyplot.figure(index)
     pyplot.title('fft section')
     pyplot.plot(freq,dbs)
     pyplot.xlim(0,fs/2)
     pyplot.xlabel('Frequency(Hz)')
     pyplot.ylabel('Amplitude(dB)')
     
-    
-    #find data point at respective frequencies either add or minus 1000
-    print(len(section))
-    n697 = int((abs(697-fs))/fs*len(section))   
-    n770 = int((abs(770-fs))/fs*len(section))       
-    n852 = int((abs(852-fs))/fs*len(section))   
-    n941 = int((abs(941-fs))/fs*len(section))
-    n1209 = int((abs(1209-fs))/fs*len(section)) 
-    n1336 = int((abs(1336-fs))/fs*len(section)) 
-    n1477 = int((abs(1477-fs))/fs*len(section))
-    
-    #findpeaks 
-    peaks = scipy.signal.find_peaks(dbs, height=10)  
-    print(peaks[0])
-    print(n770,n1209)
-    
-
-    numb=-1                                          # cannot detect any number arg
-    offs=20
-                                    
-    if (max(dbs[n697-offs:n697+offs]) > 20) and (max(dbs[n1209-offs:n1209+offs]) > 20):      # use 10dB as threshold
+    print(max(dbs))
+    #find data point at respective frequencies
+    n697 = int(len(section)/fs*697)        
+    n770 = int(len(section)/fs*770)      
+    n852 = int(len(section)/fs*852) 
+    n941 = int(len(section)/fs*941)
+    n1209 = int(len(section)/fs*330) 
+    n1336 = int(len(section)/fs*1336) 
+    n1477 = int(len(section)/fs*1477)
+    #print(n1209)        # print for diagnostic purpose
+  
+    numb=-1                                         # cannot detect any number arg
+    if (dbs[n697] > 10) and (dbs[n1209] > 10):      # use 10dB as threshold
         numb=1
-    if (max(dbs[n697-offs:n697+offs]) > 20) and (max(dbs[n1336-offs:n1336+offs]) > 20):      # use 10dB as threshold
+    elif (dbs[n697] > 10) and (dbs[n1336] > 10):
         numb=2
-    if (max(dbs[n697-offs:n697+offs]) > 20) and (max(dbs[n1477-offs:n1477+offs]) > 20):     
+    elif (dbs[n697] > 10) and (dbs[n1477] > 10):
         numb=3
-    if (max(dbs[n770-offs:n770+offs]) > 20) and (max(dbs[n1209-offs:n1209+offs]) > 20):
+    elif (dbs[n770] > 10) and (dbs[n1209] > 10):
         numb=4
-    if (max(dbs[n770-offs:n770+offs]) > 20) and (max(dbs[n1336-offs:n1336+offs]) > 20):
+    elif (dbs[n770] > 10) and (dbs[n1336] > 10):
         numb=5
-    if (max(dbs[n770-offs:n770+offs]) > 20) and (max(dbs[n1477-offs:n1477+offs]) > 20):
+    elif (dbs[n770] > 10) and (dbs[n1477] > 10):
         numb=6
-    if (max(dbs[n852-offs:n852+offs]) > 20) and (max(dbs[n1209-offs:n1209+offs]) > 20):
+    elif (dbs[n852] > 10) and (dbs[n1209] > 10):
         numb=7
-    if (max(dbs[n852-offs:n852+offs]) > 20) and (max(dbs[n1336-offs:n1336+offs]) > 20):
+    elif (dbs[n852] > 10) and (dbs[n1336] > 10):
         numb=8
-    if (max(dbs[n852-offs:n852+offs]) > 20) and (max(dbs[n1477-offs:n1477+offs]) > 20):
+    elif (dbs[n852] > 10) and (dbs[n1477] > 10):
         numb=9
-    if (max(dbs[n941-offs:n941+offs]) > 20) and (max(dbs[n1336-offs:n1336+offs]) > 20):
+    elif (dbs[n941] > 10) and (dbs[n1336] > 10):
         numb=0
     return numb
 
@@ -149,20 +137,13 @@ def oneDigit(data,time):
 # Main Function   
 start=np.empty(13,dtype=int)
 stop=np.empty(13,dtype=int) 
-dial=np.empty(13,dtype=int) 
 start,stop = oneDigit(data,time)        # Get Start Stop Time
-m = 0
 for i in range(13):
-    num = plotFreq(i,data,start[i],stop[i]) # Process each section
-    m += 1
+    num = plotFreq(i,data,start[i],stop[i])     # Process each section
     if num == -1:
         print("Cannot detect number.")
     else: 
-        dial[i] = num
-        print("The number pressed:",num)
-        # Print output number
-        if m > 12:
-            print(dial)
+        print("The number pressed:",num)            # Print output number
 
 
 
