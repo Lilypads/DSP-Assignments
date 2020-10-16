@@ -55,8 +55,8 @@ def plotFreq(index,data,start,stop):
     #time=np.linspace(0,stop-start,1)
     xfsection = np.fft.fft(section)         # Fourier transform the whole thing
     xfourier = xfsection/len(section)
-    dbsinit = 20*np.log10(abs(xfourier))
-    dbsinit[0] = -20        # deleting weird bit
+    dbs = 20*np.log10(abs(xfourier))
+    dbs[0] = -20        # deleting weird bit
     freq = np.linspace(0,fs,len(section))
     
 #    pyplot.figure(index+4)
@@ -67,34 +67,34 @@ def plotFreq(index,data,start,stop):
 #    pyplot.ylabel('Amplitude(dB)')
     
     # split frequency into two to erase mirror  
-    dbs = np.array_split(dbsinit, 2)
-    dbsa = dbs[0]            # dbsa array is the first half of the set of the data
+    dbsS = np.array_split(dbs, 2)
+    dbsa = dbsS[0]            # dbsa array is the first half of the set of the data
     
     # find the fiirst frequency of the peak of the 
     result = np.where(dbsa == np.amax(dbsa))
-    max1 = result[0]
-    maxabs1 = int(max1[0]/len(section)*1000) 
-    dbsb = np.delete(dbsa,max1)
+    maxs = result[0]
+    maxf = int(maxs/len(section)*1000) 
+    dbsb = np.delete(dbsa,maxs)
     result2 = np.where(dbsb == np.amax(dbsb))
-    max2 = result2[0]
-    maxabs2 = int(max2[0]/len(section)*1000)
+    maxs2 = result2[0]
+    maxf2 = int(maxs2[0]/len(section)*1000)
     
     # Decide which peak corresponds to either the high tone frequency or the low tone 
-    if max1[0] > max2[0]: 
-        dbs1 = dbsa
-        dbs2 = dbsb
-        freq2 = maxabs1 + 1000           # Reverse fold-down method 
-        freq1 = abs(maxabs2 - 1000)
-    elif max1[0] < max2[0]:
-        dbs1 = dbsb
-        dbs2 = dbsa
-        freq2 = maxabs1 + 1000
-        freq1 = abs(maxabs2 - 1000) 
+    if maxs[0] > maxs2[0]: 
+   #     dbs1 = dbsa
+    #    dbs2 = dbsb
+        freq2 = maxf + 1000           # Reverse fold-down method 
+        freq1 = abs(maxf2 - 1000)
+    elif maxs[0] < maxs2[0]:
+   #     dbs1 = dbsb
+    #    dbs2 = dbsa
+        freq2 = maxf2 + 1000
+        freq1 = abs(maxf - 1000) 
     
     # print detected frequency 
     print(freq1)
     print(freq2)
-    
+    '''    
     pyplot.figure(index+4)
     pyplot.title('fft section')
     pyplot.plot(dbs1)
@@ -102,17 +102,18 @@ def plotFreq(index,data,start,stop):
     pyplot.xlim(0,fs)
     pyplot.xlabel('Frequency(Hz)')
     pyplot.ylabel('Amplitude(dB)')
-    
+    ''' 
+  
     numb=-1                                          # cannot detect any number arg
     omin = 40
     omax = 40
-    if ((697-omin) < freq1 < (697+omax)) and ((1209-omin) < freq2 < (1209+omax)):      # use 20dB as threshold
+    if ((697-omin) < freq2 < (697+omax)) and ((1209-omin) < freq1 < (1209+omax)):      # use 20dB as threshold
         numb=1
     elif ((697-omin) < freq1 < (697+omax)) and ((1336-omin) < freq2 < (1336+omax)):      # use 20dB as threshold
         numb=2
     elif ((697-omin) < freq1 < (697+omax)) and ((1477-omin) < freq2 < (1477+omax)):      # use 20dB as threshold
         numb=3
-    elif ((770-omin) < freq1 < (770+omax)) and ((1209-omin) < freq2 < (1209+omax)):      # use 20dB as threshold
+    elif ((770-omin) < freq2 < (770+omax)) and ((1209-omin) < freq1 < (1209+omax)):      # use 20dB as threshold
         numb=4
     elif ((770-omin) < freq1 < (770+omax)) and ((1336-omin) < freq2 < (1336+omax)):      # use 20dB as threshold
         numb=5
