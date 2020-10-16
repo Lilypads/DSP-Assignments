@@ -19,6 +19,7 @@ pyplot.title('file touchtone')
 pyplot.plot(time,data)
 pyplot.xlabel('Time(ms)')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('tt_fig1.eps', format='eps')
 
 # Plot Frequency Domain
 xftone = np.fft.fft(data) 
@@ -32,6 +33,7 @@ pyplot.title('fft touchtone')
 pyplot.plot(freq,dbs)
 pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
+pyplot.savefig('tt_fig2.eps', format='eps')
 
 # Zoomed version for diagnostic purpose
 pyplot.figure(3)
@@ -40,6 +42,7 @@ pyplot.plot(time,data)
 pyplot.xlim(2800,2900)
 pyplot.xlabel('Time(ms)')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('tt_fig3.eps', format='eps')
 
 # Plot Section Frequency Spectrum + Detect Number
 count = 0
@@ -62,6 +65,32 @@ def plotFreq(index,data,start,stop):
     pyplot.xlim(0,fs/2)
     pyplot.xlabel('Frequency(Hz)')
     pyplot.ylabel('Amplitude(dB)')
+    if index==0:
+        pyplot.savefig('tt_fig4.eps', format='eps')
+    if index==1:
+        pyplot.savefig('tt_fig5.eps', format='eps')
+    if index==2:
+        pyplot.savefig('tt_fig6.eps', format='eps')
+    if index==3:
+        pyplot.savefig('tt_fig7.eps', format='eps')
+    if index==4:
+        pyplot.savefig('tt_fig8.eps', format='eps')
+    if index==5:
+        pyplot.savefig('tt_fig9.eps', format='eps')
+    if index==6:
+        pyplot.savefig('tt_fig10.eps', format='eps')
+    if index==7:
+        pyplot.savefig('tt_fig11.eps', format='eps')
+    if index==8:
+        pyplot.savefig('tt_fig12.eps', format='eps')
+    if index==9:
+        pyplot.savefig('tt_fig13.eps', format='eps')
+    if index==10:
+        pyplot.savefig('tt_fig14.eps', format='eps')
+    if index==11:
+        pyplot.savefig('tt_fig15.eps', format='eps')
+    if index==12:
+        pyplot.savefig('tt_fig16.eps', format='eps')
     
     
     #find data point at respective frequencies either add or minus 1000
