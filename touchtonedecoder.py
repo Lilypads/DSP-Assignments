@@ -1,9 +1,7 @@
 import numpy as np
-import scipy
 from numpy import loadtxt
 from matplotlib import pyplot
-from scipy.io.wavfile import write
-from scipy import signal
+#from scipy import signal
 
 # Load data
 lines = loadtxt("touchtones.dat")
