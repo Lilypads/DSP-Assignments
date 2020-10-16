@@ -1,8 +1,6 @@
 import numpy as np
-import scipy
 from numpy import loadtxt
 from matplotlib import pyplot
-from scipy.io.wavfile import write
 
 # Load data
 lines = loadtxt("touchtones.dat")
@@ -20,6 +18,7 @@ pyplot.title('file touchtone')
 pyplot.plot(time,data)
 pyplot.xlabel('Time(ms)')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('tt_fig1.eps', format='eps')
 
 # Plot Frequency Domain
 xftone = np.fft.fft(data) 
@@ -33,6 +32,7 @@ pyplot.title('fft touchtone')
 pyplot.plot(freq,dbs)
 pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
+pyplot.savefig('tt_fig2.eps', format='eps')
 
 # Zoomed version for diagnostic purpose
 pyplot.figure(3)
@@ -41,6 +41,7 @@ pyplot.plot(time,data)
 pyplot.xlim(2800,2900)
 pyplot.xlabel('Time(ms)')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('tt_fig3.eps', format='eps')
 
 # Plot Section Frequency Spectrum + Detect Number
 def plotFreq(index,data,start,stop):
@@ -61,37 +62,65 @@ def plotFreq(index,data,start,stop):
     pyplot.xlabel('Frequency(Hz)')
     pyplot.ylabel('Amplitude(dB)')
     
-    print(max(dbs))
+    if index==0:
+        pyplot.savefig('tt_fig4.eps', format='eps')
+    if index==1:
+        pyplot.savefig('tt_fig5.eps', format='eps')
+    if index==2:
+        pyplot.savefig('tt_fig6.eps', format='eps')
+    if index==3:
+        pyplot.savefig('tt_fig7.eps', format='eps')
+    if index==4:
+        pyplot.savefig('tt_fig8.eps', format='eps')
+    if index==5:
+        pyplot.savefig('tt_fig9.eps', format='eps')
+    if index==6:
+        pyplot.savefig('tt_fig10.eps', format='eps')
+    if index==7:
+        pyplot.savefig('tt_fig11.eps', format='eps')
+    if index==8:
+        pyplot.savefig('tt_fig12.eps', format='eps')
+    if index==9:
+        pyplot.savefig('tt_fig13.eps', format='eps')
+    if index==10:
+        pyplot.savefig('tt_fig14.eps', format='eps')
+    if index==11:
+        pyplot.savefig('tt_fig15.eps', format='eps')
+    if index==12:
+        pyplot.savefig('tt_fig16.eps', format='eps')
+    
+    #print(max(dbs))     # print for diagnostic purpose
     #find data point at respective frequencies
-    n697 = int(len(section)/fs*697)        
-    n770 = int(len(section)/fs*770)      
-    n852 = int(len(section)/fs*852) 
-    n941 = int(len(section)/fs*941)
-    n1209 = int(len(section)/fs*330) 
-    n1336 = int(len(section)/fs*1336) 
-    n1477 = int(len(section)/fs*1477)
+    n697 = int(len(section)/fs*np.abs(fs-697))        
+    n770 = int(len(section)/fs*np.abs(fs-770))      
+    n852 = int(len(section)/fs*np.abs(fs-852)) 
+    n941 = int(len(section)/fs*np.abs(fs-941))
+    n1209 = int(len(section)/fs*np.abs(fs-1209)) 
+    n1336 = int(len(section)/fs*np.abs(fs-1336)) 
+    n1477 = int(len(section)/fs*np.abs(fs-1477))
     #print(n1209)        # print for diagnostic purpose
   
     numb=-1                                         # cannot detect any number arg
-    if (dbs[n697] > 10) and (dbs[n1209] > 10):      # use 10dB as threshold
+    offset=18
+    if (max(dbs[n697-offset:n697+offset]) > 20) and (max(dbs[n1209-offset:n1209+offset]) > 20):      # use 20dB as threshold
         numb=1
-    elif (dbs[n697] > 10) and (dbs[n1336] > 10):
+    elif (max(dbs[n697-offset:n697+offset]) > 20) and (max(dbs[n1336-offset:n1336+offset]) > 20):
         numb=2
-    elif (dbs[n697] > 10) and (dbs[n1477] > 10):
+    elif (max(dbs[n697-offset:n697+offset]) > 20) and (max(dbs[n1477-offset:n1477+offset]) > 20):
         numb=3
-    elif (dbs[n770] > 10) and (dbs[n1209] > 10):
+    elif (max(dbs[n770-offset:n770+offset]) > 20) and (max(dbs[n1209-offset:n1209+offset]) > 20):
         numb=4
-    elif (dbs[n770] > 10) and (dbs[n1336] > 10):
+    elif (max(dbs[n770-offset:n770+offset]) > 20) and (max(dbs[n1336-offset:n1336+offset]) > 20):
         numb=5
-    elif (dbs[n770] > 10) and (dbs[n1477] > 10):
+    elif (max(dbs[n770-offset:n770+offset]) > 20) and (max(dbs[n1477-offset:n1477+offset]) > 20):
         numb=6
-    elif (dbs[n852] > 10) and (dbs[n1209] > 10):
+    elif (max(dbs[n852-offset:n852+offset]) > 20) and (max(dbs[n1209-offset:n1209+offset]) > 20):
         numb=7
-    elif (dbs[n852] > 10) and (dbs[n1336] > 10):
+    elif (max(dbs[n852-offset:n852+offset]) > 20) and (max(dbs[n1336-offset:n1336+offset]) > 20):
         numb=8
-    elif (dbs[n852] > 10) and (dbs[n1477] > 10):
+    elif (max(dbs[n852-offset:n852+offset]) > 20) and (max(dbs[n1477-offset:n1477+offset]) > 20):
         numb=9
-    elif (dbs[n941] > 10) and (dbs[n1336] > 10):
+    elif (max(dbs[n941-offset:n941+offset]) > 20) and (max(dbs[n1336-offset:n1336+offset]) > 20):
         numb=0
     return numb
 
@@ -137,7 +166,7 @@ def oneDigit(data,time):
 # Main Function   
 start=np.empty(13,dtype=int)
 stop=np.empty(13,dtype=int) 
-start,stop = oneDigit(data,time)        # Get Start Stop Time
+start,stop = oneDigit(data,time)        # Get Start Stop Time arrays
 for i in range(13):
     num = plotFreq(i,data,start[i],stop[i])     # Process each section
     if num == -1:
@@ -145,88 +174,3 @@ for i in range(13):
     else: 
         print("The number pressed:",num)            # Print output number
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-# Sectioning each number
-np.empty((j,stop[i]-start[i]))
-for i in range(j):
-    for b in range(stop[i]-start[i]+1):
-        section = 
-        section[i,b] = data[start[i]+b]
-        
-'''     
-
-
-'''
-#half rect
-datalist = list(data)
-for i in range(len(data)):
-    if datalist[i]<3233:
-        datalist[i]=3333
-
-#failed attempts
-k=0
-m=0
-n=0
-thresh=50
-mint=700
-for i in range(len(data)):
-    if np.abs(data[i]-3235)<thresh:
-        k+=1
-    else:
-        k=0
-        n=+1
-    if k>mint:
-        silence=True
-        m+=1
-        k=0
-    else:
-        silence=False
-        
-    print(silence)
-print(len(data))
-print(n)
-print(m)          
-
-#Peak Detector
-#peaks = scipy.signal.find_peaks(xftone, height = 50000, distance = 100)
-freq= list(peaks[0])
-print(freq)
-
-#Frequency Parser
-for i in freq:
-    if 1000 < i < 2000:
-        print('1')
-    if 2000 < i < 3000:
-        print('8')
-    if 4000 < i < 5000:
-        print('2')
-    if 7000 < i < 8000:
-        print('3')
-    if 9000 < i < 10000:
-        print('4')
-    if 10000 < i < 11000:
-        print('5')
-    if 13000 < i < 14000:
-        print('7')
-    if 14000 < i < 15000:
-        print('6')
-
-'''
