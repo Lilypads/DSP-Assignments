@@ -71,18 +71,25 @@ def plotFreq(index,data,start,stop):
 
     result = np.where(dbsa == np.amax(dbsa))
     max1 = result[0]
-    print(int(max1[0]/len(section)*1000))
+    maxabs1 = int(max1[0]/len(section)*1000)
     dbsb = np.delete(dbsa,max1)
     result2 = np.where(dbsb == np.amax(dbsb))
     max2 = result2[0]
-    print(int(max2[0]/len(section)*1000))
+    maxabs2 = int(max2[0]/len(section)*1000)
     
     if max1[0] > max2[0]: 
         dbs1 = dbsa
         dbs2 = dbsb
+        freq2 = maxabs1 + 1000
+        freq1 = abs(maxabs2 - 1000)
     elif max1[0] < max2[0]:
         dbs1 = dbsb
         dbs2 = dbsa
+        freq2 = maxabs1 + 1000
+        freq1 = abs(maxabs2 - 1000) 
+    
+    print(freq1)
+    print(freq2)
         
     for i in range(len(dbs1)):
         if dbs1[i] < max(dbs1):
@@ -99,45 +106,33 @@ def plotFreq(index,data,start,stop):
     pyplot.xlim(0,fs)
     pyplot.xlabel('Frequency(Hz)')
     pyplot.ylabel('Amplitude(dB)')
-
-    #find data point at respective frequencies either add or minus 1000
-    print("Section Length:",len(section))   # print for diagnostic purpose
-    n697 = int((abs(697-fs))/fs*len(section))   
-    n770 = int((abs(770-fs))/fs*len(section))       
-    n852 = int((abs(852-fs))/fs*len(section))   
-    n941 = int((abs(941-fs))/fs*len(section))
-    n1209 = int((abs(1209-fs))/fs*len(section)) 
-    n1336 = int((abs(1336-fs))/fs*len(section)) 
-    n1477 = int((abs(1477-fs))/fs*len(section))
-    
-    #findpeaks 
-    #peaks = scipy.signal.find_peaks(dbsa, height=20)  
-    #print("Peaks:",peaks[0])        # print for diagnostic purpose
-    
     
     numb=-1                                          # cannot detect any number arg
-    offs=40
-    if (max(dbs1[n697-offs:n697+offs]) > 20) and (max(dbs2[n1209-offs:n1209+offs]) > 20):      # use 20dB as threshold
+    omin = 40
+    omax = 40
+    if ((697-omin) < freq1 < (697+omax)) and ((1209-omin) < freq2 < (1209+omax)):      # use 20dB as threshold
         numb=1
-    if (max(dbs1[n697-offs:n697+offs]) > 20) and (max(dbs2[n1336-offs:n1336+offs]) > 20):      # use 20dB as threshold
+    elif ((697-omin) < freq1 < (697+omax)) and ((1336-omin) < freq2 < (1336+omax)):      # use 20dB as threshold
         numb=2
-    if (max(dbs1[n697-offs:n697+offs]) > 20) and (max(dbs2[n1477-offs:n1477+offs]) > 20):     
+    elif ((697-omin) < freq1 < (697+omax)) and ((1477-omin) < freq2 < (1477+omax)):      # use 20dB as threshold
         numb=3
-    if (max(dbs1[n770-offs:n770+offs]) > 20) and (max(dbs2[n1209-offs:n1209+offs]) > 20):
+    elif ((770-omin) < freq1 < (770+omax)) and ((1209-omin) < freq2 < (1209+omax)):      # use 20dB as threshold
         numb=4
-    if (max(dbs1[n770-offs:n770+offs]) > 20) and (max(dbs2[n1336-offs:n1336+offs]) > 20):
+    elif ((770-omin) < freq1 < (770+omax)) and ((1336-omin) < freq2 < (1336+omax)):      # use 20dB as threshold
         numb=5
-    if (max(dbs1[n770-offs:n770+offs]) > 20) and (max(dbs2[n1477-offs:n1477+offs]) > 20):
+    elif ((770-omin) < freq1 < (770+omax)) and ((1477-omin) < freq2 < (1477+omax)):      # use 20dB as threshold
         numb=6
-    if (max(dbs1[n852-offs:n852+offs]) > 20) and (max(dbs2[n1209-offs:n1209+offs]) > 20):
+    elif ((852-omin) < freq1 < (852+omax)) and ((1209-omin) < freq2 < (1209+omax)):      # use 20dB as threshold
         numb=7
-    if (max(dbs1[n852-offs:n852+offs]) > 20) and (max(dbs2[n1336-offs:n1336+offs]) > 20):
+    elif ((852-omin) < freq1 < (852+omax)) and ((1336-omin) < freq2 < (1336+omax)):      # use 20dB as threshold
         numb=8
-    if (max(dbs1[n852-offs:n852+offs]) > 20) and (max(dbs2[n1477-offs:n1477+offs]) > 20):
+    elif ((852-omin) < freq1 < (852+omax)) and ((1477-omin) < freq2 < (1477+omax)):      # use 20dB as threshold
         numb=9
-    if (max(dbs1[n941-offs:n941+offs]) > 20) and (max(dbs2[n1336-offs:n1336+offs]) > 20):
+    elif ((941-omin) < freq1 < (941+omax)) and ((1336-omin) < freq2 < (1336+omax)):      # use 20dB as threshold
         numb=0
     return numb
+
+    # End of Function
 
 
 # Section Split Time Finder
