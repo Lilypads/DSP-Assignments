@@ -6,7 +6,7 @@ from scipy.io.wavfile import write
 from scipy import signal
 
 # Load data
-lines = loadtxt("touchtones.dat")
+lines = loadtxt("touchtones8.dat")
 
 # Separate data into two aspects
 data = lines[:,1]
@@ -55,9 +55,10 @@ def plotFreq(index,data,start,stop):
     #time=np.linspace(0,stop-start,1)
     xfsection = np.fft.fft(section)         # Fourier transform the whole thing
     xfourier = xfsection/len(section)
-    dbs1 = 20*np.log10(abs(xfourier))
-    dbs1[0] = -20        # deleting weird bit
+    dbsinit = 20*np.log10(abs(xfourier))
+    dbsinit[0] = -20        # deleting weird bit
     freq = np.linspace(0,fs,len(section))
+    
 #    pyplot.figure(index+4)
 #    pyplot.title('fft section')
 #    pyplot.plot(freq,dbs)
@@ -65,22 +66,24 @@ def plotFreq(index,data,start,stop):
 #    pyplot.xlabel('Frequency(Hz)')
 #    pyplot.ylabel('Amplitude(dB)')
     
-    dbs = np.array_split(dbs1, 2)
-    dbsa = dbs[0]
-#     print(dbsa)
-
+    # split frequency into two to erase mirror  
+    dbs = np.array_split(dbsinit, 2)
+    dbsa = dbs[0]            # dbsa array is the first half of the set of the data
+    
+    # find the fiirst frequency of the peak of the 
     result = np.where(dbsa == np.amax(dbsa))
     max1 = result[0]
-    maxabs1 = int(max1[0]/len(section)*1000)
+    maxabs1 = int(max1[0]/len(section)*1000) 
     dbsb = np.delete(dbsa,max1)
     result2 = np.where(dbsb == np.amax(dbsb))
     max2 = result2[0]
     maxabs2 = int(max2[0]/len(section)*1000)
     
+    # Decide which peak corresponds to either the high tone frequency or the low tone 
     if max1[0] > max2[0]: 
         dbs1 = dbsa
         dbs2 = dbsb
-        freq2 = maxabs1 + 1000
+        freq2 = maxabs1 + 1000           # Reverse fold-down method 
         freq1 = abs(maxabs2 - 1000)
     elif max1[0] < max2[0]:
         dbs1 = dbsb
@@ -88,16 +91,9 @@ def plotFreq(index,data,start,stop):
         freq2 = maxabs1 + 1000
         freq1 = abs(maxabs2 - 1000) 
     
+    # print detected frequency 
     print(freq1)
     print(freq2)
-        
-    for i in range(len(dbs1)):
-        if dbs1[i] < max(dbs1):
-            dbs1[i] = 0
-    
-    for i in range(len(dbs2)):
-        if dbs2[i] < max(dbs2):
-            dbs2[i] = 0
     
     pyplot.figure(index+4)
     pyplot.title('fft section')
