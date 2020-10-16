@@ -26,7 +26,7 @@ pyplot.plot(time,data)
 pyplot.title('Time domain (raw)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
-pyplot.savefig('ve_fig1.eps', format='eps')
+#pyplot.savefig('ve_fig1.eps', format='eps')
 #pyplot.savefig('fig1.pdf', format='pdf')
 
 # Create x-axis for frequency domain plot
@@ -40,7 +40,7 @@ pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
 pyplot.xscale('log')            # Log Scale
 #pyplot.yscale('log')
-pyplot.savefig('ve_fig2.eps', format='eps')
+#pyplot.savefig('ve_fig2.eps', format='eps')
 #pyplot.savefig('fig2.pdf', format='pdf')
 
 pyplot.figure(3)
@@ -51,7 +51,7 @@ pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
 pyplot.xscale('log')            # Log Scale
 #pyplot.yscale('log')
-pyplot.savefig('ve_fig3.eps', format='eps')
+#pyplot.savefig('ve_fig3.eps', format='eps')
 #pyplot.savefig('fig3.pdf', format='pdf')
 
 # Find the array around 6000 - 10000 Hz
@@ -85,7 +85,7 @@ pyplot.plot(freq,dbs)
 pyplot.title('Before Modification (display until fs)')
 pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
-pyplot.savefig('ve_fig4.eps', format='eps')
+#pyplot.savefig('ve_fig4.eps', format='eps')
 #pyplot.savefig('fig4.pdf', format='pdf')
 
 pyplot.figure(5)
@@ -94,7 +94,7 @@ pyplot.xlim(1,fs/2)
 pyplot.title('Before Modification (display until fs/2)')
 pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
-pyplot.savefig('ve_fig5.eps', format='eps')
+#pyplot.savefig('ve_fig5.eps', format='eps')
 #pyplot.savefig('fig5.pdf', format='pdf')
 
 # Plot Frequency Domain - not log frequency - modified
@@ -104,7 +104,7 @@ pyplot.plot(freq,dbsm)
 pyplot.title('After Modification (display until fs)')
 pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
-pyplot.savefig('ve_fig6.eps', format='eps')
+#pyplot.savefig('ve_fig6.eps', format='eps')
 #pyplot.savefig('fig6.pdf', format='pdf')
 
 pyplot.figure(7)
@@ -113,7 +113,7 @@ pyplot.xlim(1,fs/2)
 pyplot.title('After Modification (display until fs/2)')
 pyplot.xlabel('Frequency(Hz)')
 pyplot.ylabel('Amplitude(dB)')
-pyplot.savefig('ve_fig7.eps', format='eps')
+#pyplot.savefig('ve_fig7.eps', format='eps')
 #pyplot.savefig('fig7.pdf', format='pdf')
 
 xffiltered = np.fft.ifft(xf)    # Inverse FFT
@@ -124,7 +124,7 @@ pyplot.plot(time,xffiltered)
 pyplot.title('Time domain (modified)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
-pyplot.savefig('ve_fig8.eps', format='eps')
+#pyplot.savefig('ve_fig8.eps', format='eps')
 #pyplot.savefig('fig8.pdf', format='pdf')
     
 write('improved.wav', fs, xffiltered.astype(data.dtype)) 
