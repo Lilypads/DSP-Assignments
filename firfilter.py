@@ -28,18 +28,17 @@ class FIR_filter:
     def dofilter(self,u):
         result = 0
         self.buffer[self.offset] = u
-        print("offset index:",self.offset)
+        #print("offset index:",self.offset)
         
         for i in range(self.offset+1):
             result = result + self.buffer[i]*self.coeff[self.offset-i]
-            print("buffer index:",i) 
-            print("coeff index:",self.offset-i)
+            #print("buffer index:",i) 
+            #print("coeff index:",self.offset-i)
        
-        print("section")
         for i in range(self.offset+1,len(self.buffer),1):
             result = result + self.buffer[i]*self.coeff[len(self.buffer)-1+self.offset+1-i]
-            print("buffer index:",i) 
-            print("coeff index:",len(self.buffer)-1+self.offset+1-i)
+            #print("buffer index:",i) 
+            #print("coeff index:",len(self.buffer)-1+self.offset+1-i)
             
         self.offset+=1
         if self.offset>=len(self.buffer):
