@@ -1,6 +1,5 @@
 import numpy as np
 from firfilter import FIR_filter
-import numpy as np
 from numpy import loadtxt
 from matplotlib import pyplot
 
@@ -67,7 +66,7 @@ print(count)
 filterecg[0] = 0
 pyplot.figure(7)
 pyplot.plot(filterecg)
-pyplot.xlim
+#pyplot.xlim(1000,2000)
     
     
     
