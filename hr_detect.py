@@ -9,8 +9,6 @@ pyplot.figure(1)
 pyplot.plot(cleanecg)
 
 #720-900
-# for i in range 180:
-#     template[i] = cleanecg[720+i]
 template=cleanecg[720:900]    
     
 pyplot.figure(2)
@@ -22,7 +20,10 @@ pyplot.plot(fir_coeff)
 
 matchfilt = FIR_filter(fir_coeff)
 
-matchresult = matchfilt.dofilter(cleanecg)
+matchresult = np.zeros(len(cleanecg))
+for i in range(len(cleanecg)):
+    matchresult[i] = matchfilt.dofilter(cleanecg[i])
+    
 pyplot.figure(4)
 pyplot.plot(matchresult)
 
@@ -30,3 +31,11 @@ matchresult = matchresult*matchresult
 pyplot.figure(5)
 pyplot.plot(matchresult)
 
+hr = np.zeros(len(matchresult))
+threshold = 0.00000000002
+for i in range(len(matchresult)):
+    if matchresult[i]>threshold:
+        hr[i]=1
+
+pyplot.figure(6)
+pyplot.plot(hr)

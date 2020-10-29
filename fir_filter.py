@@ -23,7 +23,7 @@ class FIR_filter:
         self.coeff = coefficients
         self.offset = 0
         #self.coeffIndex = 0
-        self.buffer = np.empty(len(coefficients))
+        self.buffer = np.zeros(len(coefficients))
         
     def dofilter(self,u):
         result = 0
