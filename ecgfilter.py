@@ -16,11 +16,11 @@ for i in range (20):
    print(y)
 '''
 
-fs = 5000
+fs = 500
 M = 200
 
-k1 = int(998/fs * M)
-k2 = int(1002/fs * M) 
+k1 = int(45/fs * M)
+k2 = int(55/fs * M) 
 
 Window = np.ones(M)
 Coeff = np.ones(M)
@@ -58,9 +58,9 @@ filterecg = np.ones(5000+1)
 
 for line in file1: 
     count += 1
-    ecg = line.strip()
-    print(ecg)
-    filterecg[count] = Filter.dofilter(ecg)
+    ecg1 = line.strip()
+    print(ecg1)
+    filterecg[count] = Filter.dofilter(ecg1)
     
 print(count)
 filterecg[0] = 0
