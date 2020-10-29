@@ -8,8 +8,9 @@ cleanecg = loadtxt("shortecg.dat")
 pyplot.figure(1)
 pyplot.plot(cleanecg)
 
-template = np.empty(181)
-template = cleanecg[720,900]
+#720-900
+for i in range 180:
+    template[i] = cleanecg[720+i]
 pyplot.figure(2)
 pyplot.plot(template)
 
@@ -21,5 +22,9 @@ matchfilt = FIR_filter(fir_coeff)
 
 matchresult = matchfilt.dofilter(cleanecg)
 pyplot.figure(4)
+pyplot.plot(matchresult)
+
+matchresult = matchresult*matchresult
+pyplot.figure(5)
 pyplot.plot(matchresult)
 
