@@ -14,7 +14,7 @@ pyplot.title('ecg (filtered)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 
-#720-900
+#775-975
 template=cleanecg[775:975]    
     
 pyplot.figure(2)
@@ -59,6 +59,6 @@ for i in range(len(matchresult)):
 
 pyplot.figure(6)
 pyplot.plot(hr)
-pyplot.title('Heard Beat Detection Sequence')
+pyplot.title('Heart Beat Detection Sequence')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
