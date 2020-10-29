@@ -17,7 +17,7 @@ for i in range (20):
 '''
 
 fs = 250
-M = 200
+M = 500     #loses 2 heard beat to warm up the filter (2seconds)
 
 # 50 Hz Notch Filter
 k1 = int(49/fs * M)
@@ -57,7 +57,7 @@ Filter = FIR_filter(Coeff)
 
 
 #DC filter
-k3 = int(2/fs * M)
+k3 = int(0.5/fs * M)
 WindowDC = np.ones(M)
 CoeffDC = np.ones(M)
 

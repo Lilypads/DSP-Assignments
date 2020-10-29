@@ -15,7 +15,7 @@ pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 
 #720-900
-template=cleanecg[720:900]    
+template=cleanecg[775:975]    
     
 pyplot.figure(2)
 time2 = np.linspace(0,len(template)/fs,len(template))
@@ -42,6 +42,7 @@ pyplot.plot(time,matchresult)
 pyplot.title('Matched Filtered ecg')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
+print(len(matchresult))
 
 matchresult = matchresult*matchresult
 pyplot.figure(5)
@@ -57,7 +58,7 @@ for i in range(len(matchresult)):
         hr[i]=1
 
 pyplot.figure(6)
-pyplot.plot(time,hr)
+pyplot.plot(hr)
 pyplot.title('Heard Beat Detection Sequence')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
