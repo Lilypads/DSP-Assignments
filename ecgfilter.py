@@ -16,11 +16,11 @@ for i in range (20):
    print(y)
 '''
 
-fs = 500
+fs = 250
 M = 200
 
-k1 = int(45/fs * M)
-k2 = int(55/fs * M) 
+k1 = int(49/fs * M)
+k2 = int(51/fs * M) 
 
 Window = np.ones(M)
 Coeff = np.ones(M)
@@ -28,45 +28,76 @@ Coeff = np.ones(M)
 Window[k1:k2+1] = 0
 Window[M-k2:M-k1+1] = 0
 
-pyplot.figure(4)
+pyplot.figure(1)
 pyplot.plot(Window)
 
 W = np.fft.ifft(Window)
 W = np.real(W)
 
-pyplot.figure(5)
+pyplot.figure(2)
 pyplot.plot(W)
 
 Coeff[0:int(M/2)] =  W[int(M/2):M]
 Coeff[int(M/2):M] =  W[0:int(M/2)]
 
-pyplot.figure(6)
+pyplot.figure(3)
 pyplot.plot(Coeff)
 
 file1 = open('ECG.dat', 'r') 
 
 ecg = loadtxt("ECG.dat")
 
-pyplot.figure(1)
+pyplot.figure(4)
 pyplot.plot(ecg)
+
+fx=np.fft.fft(ecg)
+fxx = fx/len(ecg)             # Fourier Transform Normalised
+dbs = 20*np.log10(abs(fxx))    # DB Conversion 
+pyplot.figure(9)
+freq = np.linspace(0,fs,len(ecg))
+pyplot.plot(freq,dbs)
 
 count = 0
 
 Filter = FIR_filter(Coeff)
 
+#DC filter
+k3 = int(2/fs * M)
+WindowDC = np.ones(M)
+CoeffDC = np.ones(M)
+
+WindowDC[0:k3+1] = 0
+pyplot.figure(6)
+pyplot.plot(WindowDC)
+
+WDC = np.fft.ifft(WindowDC)
+WDC = np.real(WDC)
+
+pyplot.figure(7)
+pyplot.plot(WDC)
+
+CoeffDC[0:int(M/2)] =  WDC[int(M/2):M]
+CoeffDC[int(M/2):M] =  WDC[0:int(M/2)]
+
+pyplot.figure(8)
+pyplot.plot(CoeffDC)
+
+FilterDC = FIR_filter(CoeffDC)
+
 filterecg = np.ones(5000+1)
+intermediate = 0
 
 for line in file1: 
     count += 1
     ecg1 = line.strip()
     print(ecg1)
-    filterecg[count] = Filter.dofilter(ecg1)
+    intermediate = Filter.dofilter(ecg1)
+    filterecg[count] = FilterDC.dofilter(intermediate)
     
 print(count)
-filterecg[0] = 0
-pyplot.figure(7)
+pyplot.figure(5)
 pyplot.plot(filterecg)
-#pyplot.xlim(1000,2000)
+pyplot.ylim(-0.002,0.002)
     
     
     
