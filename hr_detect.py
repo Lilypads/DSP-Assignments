@@ -9,8 +9,10 @@ pyplot.figure(1)
 pyplot.plot(cleanecg)
 
 #720-900
-for i in range 180:
-    template[i] = cleanecg[720+i]
+# for i in range 180:
+#     template[i] = cleanecg[720+i]
+template=[720:900]    
+    
 pyplot.figure(2)
 pyplot.plot(template)
 
