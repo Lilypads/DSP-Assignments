@@ -1,5 +1,5 @@
 import numpy as np
-from firfilter import FIR_filter
+from fir_filter import FIR_filter
 from numpy import loadtxt
 from matplotlib import pyplot
 
@@ -19,6 +19,7 @@ for i in range (20):
 fs = 250
 M = 200
 
+# 50 Hz Notch Filter
 k1 = int(49/fs * M)
 k2 = int(51/fs * M) 
 
@@ -43,23 +44,8 @@ Coeff[int(M/2):M] =  W[0:int(M/2)]
 pyplot.figure(3)
 pyplot.plot(Coeff)
 
-file1 = open('ECG.dat', 'r') 
-
-ecg = loadtxt("ECG.dat")
-
-pyplot.figure(4)
-pyplot.plot(ecg)
-
-fx=np.fft.fft(ecg)
-fxx = fx/len(ecg)             # Fourier Transform Normalised
-dbs = 20*np.log10(abs(fxx))    # DB Conversion 
-pyplot.figure(9)
-freq = np.linspace(0,fs,len(ecg))
-pyplot.plot(freq,dbs)
-
-count = 0
-
 Filter = FIR_filter(Coeff)
+
 
 #DC filter
 k3 = int(2/fs * M)
@@ -84,9 +70,28 @@ pyplot.plot(CoeffDC)
 
 FilterDC = FIR_filter(CoeffDC)
 
+
+# load ECG file
+file1 = open('ECG.dat', 'r')    #line by line to use as real-time filter
+
+ecg = loadtxt("ECG.dat")        #for diagnosis plot
+
+pyplot.figure(4)
+pyplot.plot(ecg)
+
+# Investigate frequency domain
+fx=np.fft.fft(ecg)
+fxx = fx/len(ecg)             # Fourier Transform Normalised
+dbs = 20*np.log10(abs(fxx))    # DB Conversion 
+pyplot.figure(9)
+freq = np.linspace(0,fs,len(ecg))
+pyplot.plot(freq,dbs)
+
+
 filterecg = np.ones(5000+1)
 intermediate = 0
 
+count = 0
 for line in file1: 
     count += 1
     ecg1 = line.strip()
