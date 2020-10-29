@@ -104,7 +104,7 @@ pyplot.figure(5)
 pyplot.plot(filterecg)
 pyplot.ylim(-0.002,0.002)
     
-    
+np.savetxt('shortecg.dat',filterecg)
     
 
 
