@@ -1,3 +1,4 @@
+from ecg_gudb_database import GUDb
 import numpy as np
 from fir_filter import FIR_filter
 from numpy import loadtxt
@@ -16,12 +17,26 @@ for i in range (20):
    print(y)
 '''
 
-fs = 250
-M = 500     #loses 2 heard beat to warm up the filter (2seconds)
+
+'''Initialise experiments from the files of einthoven'''
+subject_number = 3
+experiment = 'walking' 
+ecg_class = GUDb(subject_number, experiment)
+
+'''Initialise experiments from the files of einthoven'''
+chest_strap_V2_V1 = ecg_class.cs_V2_V1
+einthoven_ii = ecg_class.einthoven_II
+
+'''Filtered Data With Einthoven'''
+ecg_class.filter_data()
+einthoven_ii_filt = ecg_class.einthoven_II_filt
+
+fs = 250    #Hz
+M = 500     #loses 2 heart beat to warm up the filter (2seconds)
 
 # 50 Hz Notch Filter
-k1 = int(49/fs * M)
-k2 = int(51/fs * M) 
+k1 = int(49.5/fs * M)
+k2 = int(50.5/fs * M) 
 
 Window = np.ones(M)
 Coeff = np.ones(M)
@@ -102,6 +117,8 @@ pyplot.title('ecg (raw)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 
+
+
 # Investigate frequency domain
 fx=np.fft.fft(ecg)
 fxx = fx/len(ecg)             # Fourier Transform Normalised
@@ -115,15 +132,21 @@ pyplot.ylabel('Amplitude')
 
 
 filterecg = np.zeros(len(ecg)+1)
+filtereinthoven = np.zeros(len(einthoven_ii)+1)
 intermediate = 0
+
 
 count = 0
 for line in file1: 
     count += 1
     ecg1 = line.strip()
-    print(ecg1)
+    #print(ecg1)
     intermediate = Filter.dofilter(ecg1)
     filterecg[count] = FilterDC.dofilter(intermediate)
+    
+for i in range(len(einthoven_ii)): 
+    intermediate = Filter.dofilter(einthoven_ii[i])
+    filtereinthoven[i] = FilterDC.dofilter(intermediate)
     
 print(count)
 pyplot.figure(9)
@@ -133,8 +156,29 @@ pyplot.ylim(-0.002,0.002)
 pyplot.title('ecg (filtered)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
+
+
+print(count)
+pyplot.figure(10)
+time3 = np.linspace(0,len(filtereinthoven)/fs,len(filtereinthoven))
+pyplot.plot(time3,filtereinthoven)
+pyplot.ylim(-0.002,0.002)
+pyplot.title('einthoven (filtered)')
+pyplot.xlabel('Time(s)')
+pyplot.ylabel('Amplitude')
+
+'''
+pyplot.figure(11)
+print(len(einthoven_ii))
+time = np.linspace(0,len(einthoven_ii)/fs,len(einthoven_ii))
+pyplot.plot(time,einthoven_ii)
+pyplot.title('einthoven_ii walking (raw and filtered)')
+pyplot.xlabel('Time(s)')
+pyplot.ylabel('Amplitude')
+'''
     
 np.savetxt('shortecg.dat',filterecg)
+np.savetxt('shorteint.dat',filtereinthoven)
     
 
 
