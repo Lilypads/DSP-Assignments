@@ -22,6 +22,7 @@ pyplot.plot(Window)
 pyplot.title('50 Hz Notch Filter - Ideal')
 pyplot.xlabel('M (sample number)')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('ecg_fig1.svg', format='svg')
 
 W = np.fft.ifft(Window)
 W = np.real(W)
@@ -31,6 +32,7 @@ pyplot.plot(W)
 pyplot.title('50 Hz Notch Filter - IFFT')
 pyplot.xlabel('Coefficient Index')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('ecg_fig2.svg', format='svg')
 
 Coeff[0:int(M/2)] =  W[int(M/2):M]
 Coeff[int(M/2):M] =  W[0:int(M/2)]
@@ -40,6 +42,7 @@ pyplot.plot(Coeff)
 pyplot.title('50 Hz Notch Filter - IFFT(fixed)')
 pyplot.xlabel('Coefficient Index')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('ecg_fig3.svg', format='svg')
 
 Filter = FIR_filter(Coeff)
 
@@ -55,6 +58,7 @@ pyplot.plot(WindowDC)
 pyplot.title('DC Filter - Ideal')
 pyplot.xlabel('M (sample number)')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('ecg_fig4.svg', format='svg')
 
 WDC = np.fft.ifft(WindowDC)
 WDC = np.real(WDC)
@@ -64,6 +68,7 @@ pyplot.plot(WDC)
 pyplot.title('DC Filter - IFFT')
 pyplot.xlabel('Coefficient Index')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('ecg_fig5.svg', format='svg')
 
 CoeffDC[0:int(M/2)] =  WDC[int(M/2):M]
 CoeffDC[int(M/2):M] =  WDC[0:int(M/2)]
@@ -73,6 +78,7 @@ pyplot.plot(CoeffDC)
 pyplot.title('DC Filter - IFFT(fixed)')
 pyplot.xlabel('Coefficient Index')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('ecg_fig6.svg', format='svg')
 
 FilterDC = FIR_filter(CoeffDC)
 
@@ -89,6 +95,7 @@ pyplot.plot(time,ecg)
 pyplot.title('ecg (raw)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('ecg_fig7.svg', format='svg')
 
 
 # Investigate frequency domain
@@ -101,6 +108,7 @@ pyplot.plot(freq,dbs)
 pyplot.title('ecg (raw) - Frequency Domain')
 pyplot.xlabel('Frequency (Hz)')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('ecg_fig8.svg', format='svg')
 
 #load second ECG data
 '''Initialise experiments from the files of einthoven'''
@@ -144,6 +152,7 @@ pyplot.ylim(-0.002,0.002)
 pyplot.title('ecg (filtered)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('ecg_fig9.svg', format='svg')
 
 pyplot.figure(10)
 time3 = np.linspace(0,len(filtereinthoven)/fs,len(filtereinthoven))
@@ -152,16 +161,18 @@ pyplot.ylim(-0.002,0.002)
 pyplot.title('einthoven (filtered)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
+pyplot.savefig('ecg_fig10.svg', format='svg')
 
-''' 
-#try to plot both raw and filtered on same plot figure 10 for diagnosis purpose
-print(len(einthoven_ii))
-time = np.linspace(0,len(einthoven_ii)/fs,len(einthoven_ii))
-pyplot.plot(time,einthoven_ii)
-pyplot.title('einthoven_ii walking (raw and filtered)')
+
+pyplot.figure(11)
+#print(len(einthoven_ii))
+time4 = np.linspace(0,len(einthoven_ii)/fs,len(einthoven_ii))
+pyplot.plot(time4,einthoven_ii)
+pyplot.title('einthoven_ii (raw)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
-'''
+pyplot.savefig('ecg_fig11.svg', format='svg')
+
 
 #save filtered data    
 np.savetxt('shortecg.dat',filterecg)
