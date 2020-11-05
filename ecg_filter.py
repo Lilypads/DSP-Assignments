@@ -20,7 +20,7 @@ for i in range (20):
 
 '''Initialise experiments from the files of einthoven'''
 subject_number = 3
-experiment = 'walking' 
+experiment = 'maths' 
 ecg_class = GUDb(subject_number, experiment)
 
 '''Initialise experiments from the files of einthoven'''
