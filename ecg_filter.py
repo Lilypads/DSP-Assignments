@@ -134,8 +134,9 @@ for i in range(len(einthoven_ii)):
     intermediate = Filter.dofilter(einthoven_ii[i])
     filtereinthoven[i] = FilterDC.dofilter(intermediate)
 
-#plot the filtered data    
 #print(count)
+
+#plot the filtered data    
 pyplot.figure(9)
 time2 = np.linspace(0,len(filterecg)/fs,len(filterecg))
 pyplot.plot(time2,filterecg)
