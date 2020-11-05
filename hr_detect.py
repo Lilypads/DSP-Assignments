@@ -4,10 +4,16 @@ from matplotlib import pyplot
 from numpy import loadtxt
 from fir_filter import FIR_filter
 
-    
-    
-#cleanecg = loadtxt("shortecg.dat") cleanecg = loadtxt("shortecg.dat") 
-cleanecg = loadtxt("shorteint.dat") 
+
+''' Load ECG data from .dat, case 1 for shortecg.dat, case 2 for Einthoven_ii Walking ''' 
+
+Case = 0
+Case = int(input("Case 1 For shortecg.dat. Case 2 For Einthoven_ii Walking. Please enter case number: "))
+
+if Case == 1:
+    cleanecg = loadtxt("shortecg.dat")
+if Case == 2:
+    cleanecg = loadtxt("shorteint.dat") 
 fs=250
 
 pyplot.figure(1)
@@ -18,9 +24,11 @@ pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 
 #775-975
-#template=cleanecg[775:975]  
-template=cleanecg[7050:7225]    
-      
+
+if Case == 1:
+    template=cleanecg[775:975] 
+if Case == 2:
+    template=cleanecg[7050:7225] 
     
 pyplot.figure(2)
 time2 = np.linspace(0,len(template)/fs,len(template))
@@ -73,25 +81,17 @@ pyplot.ylabel('Amplitude')
 j = 0
 k = 0
 m = 0
-index = np.zeros(len(hr))
-beatone = np.zeros(len(hr))
-beatwo = np.zeros(len(hr))
-deltat = np.zeros(len(hr)+1)
-rate = np.zeros(len(hr))
 
+index = np.zeros(len(hr))
 thresh = int(1/(3.66/fs))    #3.66 is the maximum that would ever occur (upper limit)
 
+j = 0
 for i in range(len(hr)):
     if hr[i] == 1:
+        j+=1
         for n in range(int(thresh)):
             if i+n+1 <= 30000: 
                 hr[i+n+1] = 0
-            
-      #  index[j] = i
-      #  j += 1
-      #  if j != 0:    
-      #      if index[j] - index[j-1] < thresh: 
-      #         hr[i] = 0
 
 pyplot.figure(7)
 pyplot.plot(hr)
@@ -100,24 +100,32 @@ pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 #pyplot.xlim(3,120)
 
+beatone = np.zeros(j)
+deltat = np.zeros(j)
+rate = np.zeros(j)
 
 for i in range(len(hr)):
     if hr[i] != 0:
         beatone[k] = i
-        beatwo[k-1] = i
-        #print('ONE',beatone[k])
-        #print('TWO',beatone[k-1])
         k += 1
         if k >= 0:          # To neglect the first detection
             deltat[m] = (beatone[m] - beatone[m-1])/fs
-            print('ONE',beatone[m])
-            print('TWO',beatone[m-1])
-            print('TIME',deltat[m])
+            # print('ONE',beatone[m])
+            # print('TWO',beatone[m-1])
+            # print('TIME',deltat[m])
             rate[m] = (1/deltat[m])*60
             print(rate[m])
             m += 1
         
-            
+pyplot.figure(8)
+pyplot.plot(beatone/fs,rate)
+pyplot.title('Heartrate Plot')
+pyplot.xlabel('Time(s)')
+pyplot.ylabel('Beats/Minute')
+pyplot.xlim(4,max(beatone)/fs+1)
+
+
+         
 
         
 
