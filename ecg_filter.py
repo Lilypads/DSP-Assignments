@@ -4,35 +4,8 @@ from fir_filter import FIR_filter
 from numpy import loadtxt
 from matplotlib import pyplot
 
-
-'''
-h = np.array([1/2,1/2,0,0,0])
-f = FIR_filter(h)
-y= f.dofilter(0)
-print(y)
-y= f.dofilter(1)
-print(y)
-for i in range (20):
-   y= f.dofilter(0)
-   print(y)
-'''
-
-
-'''Initialise experiments from the files of einthoven'''
-subject_number = 3
-experiment = 'maths' 
-ecg_class = GUDb(subject_number, experiment)
-
-'''Initialise experiments from the files of einthoven'''
-chest_strap_V2_V1 = ecg_class.cs_V2_V1
-einthoven_ii = ecg_class.einthoven_II
-
-'''Filtered Data With Einthoven'''
-ecg_class.filter_data()
-einthoven_ii_filt = ecg_class.einthoven_II_filt
-
 fs = 250    #Hz
-M = 500     #loses 2 heart beat to warm up the filter (2seconds)
+M = 500     #loses 2 heart beat to warm up the filter (2seconds)/affect frequency resolution
 
 # 50 Hz Notch Filter
 k1 = int(49.5/fs * M)
@@ -104,7 +77,7 @@ pyplot.ylabel('Amplitude')
 FilterDC = FIR_filter(CoeffDC)
 
 
-# load ECG file
+# load first ECG file
 file1 = open('ECG.dat', 'r')    #line by line to use as real-time filter
 
 ecg = loadtxt("ECG.dat")        #for diagnosis plot
@@ -118,7 +91,6 @@ pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 
 
-
 # Investigate frequency domain
 fx=np.fft.fft(ecg)
 fxx = fx/len(ecg)             # Fourier Transform Normalised
@@ -130,12 +102,26 @@ pyplot.title('ecg (raw) - Frequency Domain')
 pyplot.xlabel('Frequency (Hz)')
 pyplot.ylabel('Amplitude')
 
+#load second ECG data
+'''Initialise experiments from the files of einthoven'''
+subject_number = 3
+experiment = 'maths' 
+ecg_class = GUDb(subject_number, experiment)
 
+'''Initialise experiments from the files of einthoven'''
+chest_strap_V2_V1 = ecg_class.cs_V2_V1
+einthoven_ii = ecg_class.einthoven_II
+
+'''Filtered Data With Einthoven'''
+ecg_class.filter_data()
+einthoven_ii_filt = ecg_class.einthoven_II_filt
+
+#define output array and intermediate variable
 filterecg = np.zeros(len(ecg)+1)
 filtereinthoven = np.zeros(len(einthoven_ii)+1)
 intermediate = 0
 
-
+#filter ecg for both data sets
 count = 0
 for line in file1: 
     count += 1
@@ -147,8 +133,9 @@ for line in file1:
 for i in range(len(einthoven_ii)): 
     intermediate = Filter.dofilter(einthoven_ii[i])
     filtereinthoven[i] = FilterDC.dofilter(intermediate)
-    
-print(count)
+
+#plot the filtered data    
+#print(count)
 pyplot.figure(9)
 time2 = np.linspace(0,len(filterecg)/fs,len(filterecg))
 pyplot.plot(time2,filterecg)
@@ -157,8 +144,6 @@ pyplot.title('ecg (filtered)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 
-
-print(count)
 pyplot.figure(10)
 time3 = np.linspace(0,len(filtereinthoven)/fs,len(filtereinthoven))
 pyplot.plot(time3,filtereinthoven)
@@ -167,8 +152,8 @@ pyplot.title('einthoven (filtered)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 
-'''
-pyplot.figure(11)
+''' 
+#try to plot both raw and filtered on same plot figure 10 for diagnosis purpose
 print(len(einthoven_ii))
 time = np.linspace(0,len(einthoven_ii)/fs,len(einthoven_ii))
 pyplot.plot(time,einthoven_ii)
@@ -176,7 +161,8 @@ pyplot.title('einthoven_ii walking (raw and filtered)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 '''
-    
+
+#save filtered data    
 np.savetxt('shortecg.dat',filterecg)
 np.savetxt('shorteint.dat',filtereinthoven)
     

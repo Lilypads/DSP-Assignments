@@ -1,4 +1,3 @@
-from ecg_gudb_database import GUDb
 import numpy as np
 from matplotlib import pyplot
 from numpy import loadtxt
@@ -14,7 +13,8 @@ if Case == 1:
     cleanecg = loadtxt("shortecg.dat")
 if Case == 2:
     cleanecg = loadtxt("shorteint.dat") 
-fs=250
+    
+fs=250      #sampling frequency of the data
 
 pyplot.figure(1)
 time = np.linspace(0,len(cleanecg)/fs,len(cleanecg))
@@ -23,13 +23,13 @@ pyplot.title('ecg (filtered)')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 
-#775-975
-
+#ecg templates for each data set
 if Case == 1:
     template=cleanecg[775:975] 
 if Case == 2:
     template=cleanecg[7050:7225] 
-    
+ 
+#plot template
 pyplot.figure(2)
 time2 = np.linspace(0,len(template)/fs,len(template))
 pyplot.plot(time2,template)
@@ -37,6 +37,7 @@ pyplot.title('1 ecg')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 
+#inverse the template
 fir_coeff = template[::-1]
 pyplot.figure(3)
 pyplot.plot(time2,fir_coeff)
@@ -44,12 +45,13 @@ pyplot.title('reversed 1 ecg')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 
+#matched filtered data    
 matchfilt = FIR_filter(fir_coeff)
 
 matchresult = np.zeros(len(cleanecg))
 for i in range(len(cleanecg)):
     matchresult[i] = matchfilt.dofilter(cleanecg[i])
-    
+
 pyplot.figure(4)
 pyplot.plot(time,matchresult)
 pyplot.title('Matched Filtered ecg')
@@ -57,6 +59,7 @@ pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 print(len(matchresult))
 
+#squared matched filtered data 
 matchresult = matchresult*matchresult
 pyplot.figure(5)
 pyplot.plot(time,matchresult)           #
@@ -64,41 +67,41 @@ pyplot.title('Squared Matched Filtered ecg')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Amplitude')
 
+#using threshold to extract the peaks
 hr = np.zeros(len(matchresult))
 threshold = 0.00000000002 
 for i in range(len(matchresult)):
     if matchresult[i]>threshold:
         hr[i]=1
         
-
 pyplot.figure(6)
 pyplot.plot(hr)
 pyplot.title('Heart Beat Detection Sequence')
-pyplot.xlabel('Time(s)')
+pyplot.xlabel('Sample number')
 pyplot.ylabel('Amplitude')
-#pyplot.xlim(3,120)
+#pyplot.xlim(3,120)             #to delete the first part where the buffer is being filled/diagnosis purpose
 
-j = 0
-k = 0
-m = 0
+#initiate counters
+j = 0   #count number of peaks
+k = 0   #detection index
+m = 0   #deltat index
 
 index = np.zeros(len(hr))
-thresh = int(1/(3.66/fs))    #3.66 is the maximum that would ever occur (upper limit)
+thresh = int(1/(3.66/fs))    #3.66beat/s is the maximum heart rate(220bpm)
 
-j = 0
 for i in range(len(hr)):
     if hr[i] == 1:
         j+=1
-        for n in range(int(thresh)):
+        for n in range(int(thresh)):    #fix the impossible detected peak to 0
             if i+n+1 <= 30000: 
                 hr[i+n+1] = 0
 
 pyplot.figure(7)
 pyplot.plot(hr)
 pyplot.title('Heart Beat Detection Sequence Error')
-pyplot.xlabel('Time(s)')
+pyplot.xlabel('Sample number')
 pyplot.ylabel('Amplitude')
-#pyplot.xlim(3,120)
+#pyplot.xlim(3,120)         #to delete the first part where the buffer is being filled/diagnosis purpose
 
 beatone = np.zeros(j)
 deltat = np.zeros(j)
@@ -110,11 +113,11 @@ for i in range(len(hr)):
         k += 1
         if k >= 0:          # To neglect the first detection
             deltat[m] = (beatone[m] - beatone[m-1])/fs
-            # print('ONE',beatone[m])
+            # print('ONE',beatone[m])       #for diagnosis purpose
             # print('TWO',beatone[m-1])
             # print('TIME',deltat[m])
             rate[m] = (1/deltat[m])*60
-            print(rate[m])
+            print("Momentary Heart Rate(BPM):",rate[m])
             m += 1
         
 pyplot.figure(8)
@@ -122,7 +125,7 @@ pyplot.plot(beatone/fs,rate)
 pyplot.title('Heartrate Plot')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Beats/Minute')
-pyplot.xlim(4,max(beatone)/fs+1)
+#pyplot.xlim(4,max(beatone)/fs+1)        #to delete the first part where the buffer is being filled/diagnosis purpose
 
 
          
