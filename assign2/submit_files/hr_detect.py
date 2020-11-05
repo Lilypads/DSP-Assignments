@@ -19,10 +19,10 @@ for Case in range (2):
     pyplot.title('ecg (filtered)')
     pyplot.xlabel('Time(s)')
     pyplot.ylabel('Amplitude')
-    # if Case == 0:
-    #     pyplot.savefig('hr_fig1.eps', format='eps')
-    # if Case == 1:
-    #     pyplot.savefig('hr_fig9.eps', format='eps')
+    if Case == 0:
+        pyplot.savefig('hr_fig1.eps', format='eps')
+    if Case == 1:
+        pyplot.savefig('hr_fig9.eps', format='eps')
     
     #ecg templates for each data set
     if Case == 0:
@@ -37,10 +37,10 @@ for Case in range (2):
     pyplot.title('1 ecg')
     pyplot.xlabel('Time(s)')
     pyplot.ylabel('Amplitude')
-    # if Case == 0:
-    #     pyplot.savefig('hr_fig2.eps', format='eps')
-    # if Case == 1:
-    #     pyplot.savefig('hr_fig10.eps', format='eps')
+    if Case == 0:
+        pyplot.savefig('hr_fig2.eps', format='eps')
+    if Case == 1:
+        pyplot.savefig('hr_fig10.eps', format='eps')
     
     #inverse the template
     fir_coeff = template[::-1]
@@ -49,10 +49,10 @@ for Case in range (2):
     pyplot.title('reversed 1 ecg')
     pyplot.xlabel('Time(s)')
     pyplot.ylabel('Amplitude')
-    # if Case == 0:
-    #     pyplot.savefig('hr_fig3.eps', format='eps')
-    # if Case == 1:
-    #     pyplot.savefig('hr_fig11.eps', format='eps')
+    if Case == 0:
+        pyplot.savefig('hr_fig3.eps', format='eps')
+    if Case == 1:
+        pyplot.savefig('hr_fig11.eps', format='eps')
     
     #matched filtered data    
     matchfilt = FIR_filter(fir_coeff)
@@ -66,10 +66,10 @@ for Case in range (2):
     pyplot.title('Matched Filtered ecg')
     pyplot.xlabel('Time(s)')
     pyplot.ylabel('Amplitude')
-    # if Case == 0:
-    #     pyplot.savefig('hr_fig4.eps', format='eps')
-    # if Case == 1:
-    #     pyplot.savefig('hr_fig12.eps', format='eps')
+    if Case == 0:
+        pyplot.savefig('hr_fig4.eps', format='eps')
+    if Case == 1:
+        pyplot.savefig('hr_fig12.eps', format='eps')
     print(len(matchresult))
     
     #squared matched filtered data 
@@ -79,10 +79,10 @@ for Case in range (2):
     pyplot.title('Squared Matched Filtered ecg')
     pyplot.xlabel('Time(s)')
     pyplot.ylabel('Amplitude')
-    # if Case == 0:
-    #     pyplot.savefig('hr_fig5.eps', format='eps')
-    # if Case == 1:
-    #     pyplot.savefig('hr_fig13.eps', format='eps')
+    if Case == 0:
+        pyplot.savefig('hr_fig5.eps', format='eps')
+    if Case == 1:
+        pyplot.savefig('hr_fig13.eps', format='eps')
     
     #using threshold to extract the peaks
     hr = np.zeros(len(matchresult))
@@ -97,10 +97,10 @@ for Case in range (2):
     pyplot.xlabel('Sample number')
     pyplot.ylabel('Amplitude')
     #pyplot.xlim(3,120)             #to delete the first part where the buffer is being filled/diagnosis purpose
-    # if Case == 0:
-    #     pyplot.savefig('hr_fig6.eps', format='eps')
-    # if Case == 1:
-    #     pyplot.savefig('hr_fig14.eps', format='eps')
+    if Case == 0:
+        pyplot.savefig('hr_fig6.eps', format='eps')
+    if Case == 1:
+        pyplot.savefig('hr_fig14.eps', format='eps')
     
     #initiate counters
     j = 0   #count number of peaks
@@ -123,10 +123,10 @@ for Case in range (2):
     pyplot.xlabel('Sample number')
     pyplot.ylabel('Amplitude')
     #pyplot.xlim(3,120)         #to delete the first part where the buffer is being filled/diagnosis purpose
-    # if Case == 0:
-    #     pyplot.savefig('hr_fig7.eps', format='eps')
-    # if Case == 1:
-    #     pyplot.savefig('hr_fig15.eps', format='eps')
+    if Case == 0:
+        pyplot.savefig('hr_fig7.eps', format='eps')
+    if Case == 1:
+        pyplot.savefig('hr_fig15.eps', format='eps')
     
     beatone = np.zeros(j)
     deltat = np.zeros(j)
@@ -151,10 +151,10 @@ for Case in range (2):
     pyplot.xlabel('Time(s)')
     pyplot.ylabel('Beats/Minute')
     #pyplot.xlim(4,max(beatone)/fs+1)        #to delete the first part where the buffer is being filled/diagnosis purpose
-    # if Case == 0:
-    #     pyplot.savefig('hr_fig8.eps', format='eps')
-    # if Case == 1:
-    #     pyplot.savefig('hr_fig16.eps', format='eps')
+    if Case == 0:
+        pyplot.savefig('hr_fig8.eps', format='eps')
+    if Case == 1:
+        pyplot.savefig('hr_fig16.eps', format='eps')
     
 
          
