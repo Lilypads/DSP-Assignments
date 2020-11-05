@@ -48,14 +48,15 @@ class FIR_filter:
     
 def unittest():
         h = np.array([1/2,1/2,0,0,0])
+        print("Coefficient:",h)
         f = FIR_filter(h)
         y= f.dofilter(0)
-        print(y)
+        print("Input 0, Output",y)
         y= f.dofilter(1)
-        print(y)
+        print("Input 1, Output",y)
         for i in range (20):
             y= f.dofilter(0)
-            print(y)
+            print("Input 0, Output",y)
 
 if __name__ == "__main__":
     unittest()
