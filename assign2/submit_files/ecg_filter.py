@@ -113,7 +113,7 @@ pyplot.savefig('ecg_fig8.eps', format='eps')
 #load second ECG data
 '''Initialise experiments from the files of einthoven'''
 subject_number = 3
-experiment = 'maths' 
+experiment = 'walking' 
 ecg_class = GUDb(subject_number, experiment)
 
 '''Initialise experiments from the files of einthoven'''
