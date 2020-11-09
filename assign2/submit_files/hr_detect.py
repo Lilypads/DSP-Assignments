@@ -103,16 +103,16 @@ for Case in range (2):
     #       pyplot.savefig('hr_fig14.eps', format='eps')
     
     #initiate counters
-    j = 0   #count number of peaks
-    k = 0   #detection index
-    m = 0   #deltat index
+    peakCounter = 0   #count number of peaks > for array size
+    detectIndex = 0   #detection index
+    deltatIndex = 0   #deltat index
     
     index = np.zeros(len(hr))
     thresh = int(1/(3.66/fs))    #3.66beat/s is the maximum heart rate(220bpm)
     
     for i in range(len(hr)):
         if hr[i] == 1:
-            j+=1
+            peakCounter+=1
             for n in range(int(thresh)):    #fix the impossible detected peak to 0
                 if i+n+1 <= 30000:          #If the time is less than 30000 
                     hr[i+n+1] = 0
@@ -128,22 +128,23 @@ for Case in range (2):
     # if Case == 1:
     #     pyplot.savefig('hr_fig15.eps', format='eps')
     
-    beatone = np.zeros(j)
-    deltat = np.zeros(j)
-    rate = np.zeros(j)
+    beatone = np.zeros(peakCounter)
+    deltat = np.zeros(peakCounter)
+    rate = np.zeros(peakCounter)
     
+    print("Momentary Heart Rate(BPM)")
     for i in range(len(hr)):
         if hr[i] != 0:          # When element is not zero, input element to new array
-            beatone[k] = i
-            k += 1
-            if k >= 0:          # To neglect the first detection
-                deltat[m] = (beatone[m] - beatone[m-1])/fs
-                # print('ONE',beatone[m])       #for diagnosis purpose
-                # print('TWO',beatone[m-1])
-                # print('TIME',deltat[m])
-                rate[m] = (1/deltat[m])*60
-                print("Momentary Heart Rate(BPM):",rate[m])
-                m += 1
+            beatone[detectIndex] = i
+            detectIndex += 1
+            if detectIndex >= 0:          # To neglect the first detection
+                deltat[deltatIndex] = (beatone[deltatIndex] - beatone[deltatIndex-1])/fs
+                # print('ONE',beatone[deltatIndex])       #for diagnosis purpose
+                # print('TWO',beatone[deltatIndex-1])
+                # print('TIME',deltat[deltatIndex])
+                rate[deltatIndex] = (1/deltat[deltatIndex])*60
+                print(rate[deltatIndex])
+                deltatIndex += 1
             
     pyplot.figure(8*Case+8)
     pyplot.plot(beatone/fs,rate)
