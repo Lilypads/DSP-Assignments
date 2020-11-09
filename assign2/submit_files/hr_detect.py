@@ -3,159 +3,159 @@ from matplotlib import pyplot
 from numpy import loadtxt
 from fir_filter import FIR_filter
 
-# Case = 0
-# #Case = int(input("Case 0 For shortecg.dat. Case 1 For Einthoven_ii Walking. Please enter case number: "))
-# for Case in range (2):
-#     if Case == 0:
-#         cleanecg = loadtxt("shortecg.dat")
-#     if Case == 1:
-#         cleanecg = loadtxt("shorteint.dat") 
+Case = 0
+#Case = int(input("Case 0 For shortecg.dat. Case 1 For Einthoven_ii Walking. Please enter case number: "))
+for Case in range (2):
+    if Case == 0:
+        cleanecg = loadtxt("shortecg.dat")
+    if Case == 1:
+        cleanecg = loadtxt("shorteint.dat") 
         
-#     fs=250      #sampling frequency of the data
+    fs=250      #sampling frequency of the data
     
-#     pyplot.figure(8*Case+1)
-#     time = np.linspace(0,len(cleanecg)/fs,len(cleanecg))
-#     pyplot.plot(time,cleanecg)
-#     pyplot.title('ecg (filtered)')
-#     pyplot.xlabel('Time(s)')
-#     pyplot.ylabel('Amplitude')
-#     # if Case == 0:
-#     #     pyplot.savefig('hr_fig1.eps', format='eps')
-#     # if Case == 1:
-#     #     pyplot.savefig('hr_fig9.eps', format='eps')
+    pyplot.figure(8*Case+1)
+    time = np.linspace(0,len(cleanecg)/fs,len(cleanecg))
+    pyplot.plot(time,cleanecg)
+    pyplot.title('ecg (filtered)')
+    pyplot.xlabel('Time(s)')
+    pyplot.ylabel('Amplitude')
+    # if Case == 0:
+    #     pyplot.savefig('hr_fig1.eps', format='eps')
+    # if Case == 1:
+    #     pyplot.savefig('hr_fig9.eps', format='eps')
     
-#     #ecg templates for each data set
-#     if Case == 0:
-#         template=cleanecg[775:975] 
-#     if Case == 1:
-#         template=cleanecg[7050:7225] 
+    #ecg templates for each data set
+    if Case == 0:
+        template=cleanecg[775:975] 
+    if Case == 1:
+        template=cleanecg[7050:7225] 
      
-#     #plot template
-#     pyplot.figure(8*Case+2)
-#     time2 = np.linspace(0,len(template)/fs,len(template))
-#     pyplot.plot(time2,template)
-#     pyplot.title('1 ecg')
-#     pyplot.xlabel('Time(s)')
-#     pyplot.ylabel('Amplitude')
-#     # if Case == 0:
-#     #     pyplot.savefig('hr_fig2.eps', format='eps')
-#     # if Case == 1:
-#     #     pyplot.savefig('hr_fig10.eps', format='eps')
+    #plot template
+    pyplot.figure(8*Case+2)
+    time2 = np.linspace(0,len(template)/fs,len(template))
+    pyplot.plot(time2,template)
+    pyplot.title('1 ecg')
+    pyplot.xlabel('Time(s)')
+    pyplot.ylabel('Amplitude')
+    # if Case == 0:
+    #     pyplot.savefig('hr_fig2.eps', format='eps')
+    # if Case == 1:
+    #     pyplot.savefig('hr_fig10.eps', format='eps')
     
-#     #inverse the template
-#     fir_coeff = template[::-1]
-#     pyplot.figure(8*Case+3)
-#     pyplot.plot(time2,fir_coeff)
-#     pyplot.title('reversed 1 ecg')
-#     pyplot.xlabel('Time(s)')
-#     pyplot.ylabel('Amplitude')
-#     # if Case == 0:
-#     #     pyplot.savefig('hr_fig3.eps', format='eps')
-#     # if Case == 1:
-#     #     pyplot.savefig('hr_fig11.eps', format='eps')
+    #inverse the template
+    fir_coeff = template[::-1]
+    pyplot.figure(8*Case+3)
+    pyplot.plot(time2,fir_coeff)
+    pyplot.title('reversed 1 ecg')
+    pyplot.xlabel('Time(s)')
+    pyplot.ylabel('Amplitude')
+    # if Case == 0:
+    #     pyplot.savefig('hr_fig3.eps', format='eps')
+    # if Case == 1:
+    #     pyplot.savefig('hr_fig11.eps', format='eps')
     
-#     #matched filtered data    
-#     matchfilt = FIR_filter(fir_coeff)
+    #matched filtered data    
+    matchfilt = FIR_filter(fir_coeff)
     
-#     matchresult = np.zeros(len(cleanecg))
-#     for i in range(len(cleanecg)):
-#         matchresult[i] = matchfilt.dofilter(cleanecg[i])
+    matchresult = np.zeros(len(cleanecg))
+    for i in range(len(cleanecg)):
+        matchresult[i] = matchfilt.dofilter(cleanecg[i])
     
-#     pyplot.figure(8*Case+4)
-#     pyplot.plot(time,matchresult)
-#     pyplot.title('Matched Filtered ecg')
-#     pyplot.xlabel('Time(s)')
-#     pyplot.ylabel('Amplitude')
-#     # if Case == 0:
-#     #     pyplot.savefig('hr_fig4.eps', format='eps')
-#     # if Case == 1:
-#     #     pyplot.savefig('hr_fig12.eps', format='eps')
-#     print(len(matchresult))
+    pyplot.figure(8*Case+4)
+    pyplot.plot(time,matchresult)
+    pyplot.title('Matched Filtered ecg')
+    pyplot.xlabel('Time(s)')
+    pyplot.ylabel('Amplitude')
+    # if Case == 0:
+    #     pyplot.savefig('hr_fig4.eps', format='eps')
+    # if Case == 1:
+    #     pyplot.savefig('hr_fig12.eps', format='eps')
+    print(len(matchresult))
     
-#     #squared matched filtered data 
-#     matchresult = matchresult*matchresult
-#     pyplot.figure(8*Case+5)
-#     pyplot.plot(time,matchresult)           #
-#     pyplot.title('Squared Matched Filtered ecg')
-#     pyplot.xlabel('Time(s)')
-#     pyplot.ylabel('Amplitude')
-#     # if Case == 0:
-#     #     pyplot.savefig('hr_fig5.eps', format='eps')
-#     # if Case == 1:
-#     #     pyplot.savefig('hr_fig13.eps', format='eps')
+    #squared matched filtered data 
+    matchresult = matchresult*matchresult
+    pyplot.figure(8*Case+5)
+    pyplot.plot(time,matchresult)           #
+    pyplot.title('Squared Matched Filtered ecg')
+    pyplot.xlabel('Time(s)')
+    pyplot.ylabel('Amplitude')
+    # if Case == 0:
+    #     pyplot.savefig('hr_fig5.eps', format='eps')
+    # if Case == 1:
+    #     pyplot.savefig('hr_fig13.eps', format='eps')
     
-#     #using threshold to extract the peaks
-#     hr = np.zeros(len(matchresult))
-#     threshold = 0.00000000002 
-#     for i in range(len(matchresult)):
-#         if matchresult[i]>threshold:
-#             hr[i]=1
+    #using threshold to extract the peaks
+    hr = np.zeros(len(matchresult))
+    threshold = 0.00000000002 
+    for i in range(len(matchresult)):
+        if matchresult[i]>threshold:
+            hr[i]=1
             
-#     pyplot.figure(8*Case+6)
-#     pyplot.plot(hr)
-#     pyplot.title('Heart Beat Detection Sequence')
-#     pyplot.xlabel('Sample number')
-#     pyplot.ylabel('Amplitude')
-#     #pyplot.xlim(3,120)             #to delete the first part where the buffer is being filled/diagnosis purpose
-#     # if Case == 0:
-#     #     pyplot.savefig('hr_fig6.eps', format='eps')
-#     # if Case == 1:
-#     #       pyplot.savefig('hr_fig14.eps', format='eps')
+    pyplot.figure(8*Case+6)
+    pyplot.plot(hr)
+    pyplot.title('Heart Beat Detection Sequence')
+    pyplot.xlabel('Sample number')
+    pyplot.ylabel('Amplitude')
+    #pyplot.xlim(3,120)             #to delete the first part where the buffer is being filled/diagnosis purpose
+    # if Case == 0:
+    #     pyplot.savefig('hr_fig6.eps', format='eps')
+    # if Case == 1:
+    #       pyplot.savefig('hr_fig14.eps', format='eps')
     
-#     #initiate counters
-#     peakCounter = 0   #count number of peaks > for array size
-#     detectIndex = 0   #detection index
-#     deltatIndex = 0   #deltat index
+    #initiate counters
+    peakCounter = 0   #count number of peaks > for array size
+    detectIndex = 0   #detection index
+    deltatIndex = 0   #deltat index
     
-#     index = np.zeros(len(hr))
-#     thresh = int(1/(3.66/fs))    #3.66beat/s is the maximum heart rate(220bpm)
+    index = np.zeros(len(hr))
+    thresh = int(1/(3.66/fs))    #3.66beat/s is the maximum heart rate(220bpm)
     
-#     for i in range(len(hr)):
-#         if hr[i] == 1:
-#             peakCounter+=1
-#             for n in range(int(thresh)):    #fix the impossible detected peak to 0
-#                 if i+n+1 <= 30000:          #If the time is less than 30000 
-#                     hr[i+n+1] = 0
+    for i in range(len(hr)):
+        if hr[i] == 1:
+            peakCounter+=1
+            for n in range(int(thresh)):    #fix the impossible detected peak to 0
+                if i+n+1 <= 30000:          #If the time is less than 30000 
+                    hr[i+n+1] = 0
     
-#     pyplot.figure(8*Case+7)
-#     pyplot.plot(hr)
-#     pyplot.title('Heart Beat Detection Sequence Fixed')
-#     pyplot.xlabel('Sample number')
-#     pyplot.ylabel('Amplitude')
-#     #pyplot.xlim(3,120)         #to delete the first part where the buffer is being filled/diagnosis purpose
-#     # if Case == 0:
-#     #     pyplot.savefig('hr_fig7.eps', format='eps')
-#     # if Case == 1:
-#     #     pyplot.savefig('hr_fig15.eps', format='eps')
+    pyplot.figure(8*Case+7)
+    pyplot.plot(hr)
+    pyplot.title('Heart Beat Detection Sequence Fixed')
+    pyplot.xlabel('Sample number')
+    pyplot.ylabel('Amplitude')
+    #pyplot.xlim(3,120)         #to delete the first part where the buffer is being filled/diagnosis purpose
+    # if Case == 0:
+    #     pyplot.savefig('hr_fig7.eps', format='eps')
+    # if Case == 1:
+    #     pyplot.savefig('hr_fig15.eps', format='eps')
     
-#     beatone = np.zeros(peakCounter)
-#     deltat = np.zeros(peakCounter)
-#     rate = np.zeros(peakCounter)
+    beatone = np.zeros(peakCounter)
+    deltat = np.zeros(peakCounter)
+    rate = np.zeros(peakCounter)
     
-#     print("Momentary Heart Rate(BPM)")
-#     for i in range(len(hr)):
-#         if hr[i] != 0:          # When element is not zero, input element to new array
-#             beatone[detectIndex] = i
-#             detectIndex += 1
-#             if detectIndex >= 0:          # To neglect the first detection
-#                 deltat[deltatIndex] = (beatone[deltatIndex] - beatone[deltatIndex-1])/fs
-#                 # print('ONE',beatone[deltatIndex])       #for diagnosis purpose
-#                 # print('TWO',beatone[deltatIndex-1])
-#                 # print('TIME',deltat[deltatIndex])
-#                 rate[deltatIndex] = (1/deltat[deltatIndex])*60
-#                 print(rate[deltatIndex])
-#                 deltatIndex += 1
+    print("Momentary Heart Rate(BPM)")
+    for i in range(len(hr)):
+        if hr[i] != 0:          # When element is not zero, input element to new array
+            beatone[detectIndex] = i
+            detectIndex += 1
+            if detectIndex >= 0:          # To neglect the first detection
+                deltat[deltatIndex] = (beatone[deltatIndex] - beatone[deltatIndex-1])/fs
+                # print('ONE',beatone[deltatIndex])       #for diagnosis purpose
+                # print('TWO',beatone[deltatIndex-1])
+                # print('TIME',deltat[deltatIndex])
+                rate[deltatIndex] = (1/deltat[deltatIndex])*60
+                print(rate[deltatIndex])
+                deltatIndex += 1
             
-#     pyplot.figure(8*Case+8)
-#     pyplot.plot(beatone/fs,rate)
-#     pyplot.title('Heart Rate Plot')
-#     pyplot.xlabel('Time(s)')
-#     pyplot.ylabel('Beats/Minute')
-#     #pyplot.xlim(4,max(beatone)/fs+1)        #to delete the first part where the buffer is being filled/diagnosis purpose
-#     # if Case == 0:
-#     #     pyplot.savefig('hr_fig8.eps', format='eps')
-#     # if Case == 1:
-#     #     pyplot.savefig('hr_fig16.eps', format='eps')
+    pyplot.figure(8*Case+8)
+    pyplot.plot(beatone/fs,rate)
+    pyplot.title('Heart Rate Plot')
+    pyplot.xlabel('Time(s)')
+    pyplot.ylabel('Beats/Minute')
+    #pyplot.xlim(4,max(beatone)/fs+1)        #to delete the first part where the buffer is being filled/diagnosis purpose
+    # if Case == 0:
+    #     pyplot.savefig('hr_fig8.eps', format='eps')
+    # if Case == 1:
+    #     pyplot.savefig('hr_fig16.eps', format='eps')
  
 
 class HR_filter:
@@ -200,14 +200,12 @@ class HR_filter:
 data = loadtxt("shortecg.dat") 
 fs=250
 mhr = np.zeros(len(data))
-mhrIndex = np.zeros(len(data))
 hrfilt = HR_filter()                            #instantiate the HR_filter
 for i in range(len(data)):
-    mhr[i] = hrfilt.realtimeHR(data[i],fs)    
-    mhrIndex[i] = i
+    mhr[i] = hrfilt.realtimeHR(data[i],fs)
     
 pyplot.figure(17)
-pyplot.plot(mhrIndex/fs,mhr)
+pyplot.plot(np.linspace(0,len(data)/fs,len(data)),mhr)
 pyplot.title('Momentary Heart Rate Plot')
 pyplot.xlabel('Time(s)')
 pyplot.ylabel('Beats/Minute')
